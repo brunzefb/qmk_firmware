@@ -17,6 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+/* Number of Combos */
+#define COMBO_COUNT 1
+#define COMBO_TERM 200
+
 /* key matrix size */
 // Rows are doubled-up
 #define MATRIX_ROWS 10
@@ -45,6 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Set 0 if debouncing isn't needed */
 #define DEBOUNCE 5
+
 
 /* serial.c configuration for split keyboard */
 #define SOFT_SERIAL_PIN D0
