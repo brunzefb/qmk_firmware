@@ -5,6 +5,9 @@
 #define _LOWER 2
 #define _RAISE 3
 #define _ADJUST 4
+#define KC_SHLK TD(TD_SHFT_CAPS)
+#define KC_LOWR MO(_LOWER)
+#define KC_RASE MO(_RAISE)
 
 enum custom_keycodes {
   COLEMAK = SAFE_RANGE,
@@ -44,55 +47,55 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Colemak DHm
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │  Esc   │   1!   │   2@   │   3#   │   4$   │   5%   │                          │   6^   │   7&   │   8*   │   9(   │   0)   │  `~    │
+    │  Esc   │   1!   │   2@   │   3#   │   4$   │   5%   │                          │   6^   │   7&   │   8*   │   9(   │   0)   │ Bksp   │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
     │  Tab   │   Q    │   W    │   F    │   P    │   B    │                          │   J    │   L    │   U    │   Y    │   ;:   │  |\    │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │  Bksp  │   A    │   R    │   S    │   T    │   G    │                          │   M    │   N    │   E    │   I    │   O    │   " '  │
+    │  ` .   │   A    │   R    │   S    │   T    │   G    │                          │   M    │   N    │   E    │   I    │   O    │   " '  │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │  Ctrl  │   Z    │   X    │   C    │   D    │   V    │  Alt   │        │  Alt   │   K    │   H    │   ,<   │   .>   │   /?   │ Enter  │
+    │  Ctrl  │   Z    │   X    │   C    │   D    │   V    │  Alt   │        │ Querty │   K    │   H    │   ,<   │   .>   │   /?   │ Enter  │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │ cmd    │ Shift  │MO-LOWER│                 │MO-RAISE│ Space  │ cmd    │
                                    └────────┴────────┴────────┘                 └────────┴────────┴────────┘
 */
   [_COLEMAK] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_GRAVE,
+     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSLS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_BSPC, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT,
+     KC_GRAVE, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_LALT,       TO(_QUERTY), KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLASH, KC_ENT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                    KC_LGUI, TD(TD_SHFT_CAPS), LOWER,            RAISE,  KC_SPC,   KC_RGUI
+                                    KC_LGUI, KC_SHLK, KC_LOWR,                   KC_RASE,  KC_SPC, KC_RGUI
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
 /* Querty
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │  Esc   │   1!   │   2@   │   3#   │   4$   │   5%   │                          │   6^   │   7&   │   8*   │   9(   │   0)   │  `~    │
+    │  Esc   │   1!   │   2@   │   3#   │   4$   │   5%   │                          │   6^   │   7&   │   8*   │   9(   │   0)   │  Bksp  │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
     │  Tab   │   Q    │   W    │   E    │   R    │   T    │                          │   Y    │   U    │   I    │   O    │   P    │  |\    │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │   |    │   A    │   S    │   D    │   F    │   G    │                          │   H    │   J    │   K    │   L    │  : ;   │   " '  │
+    │   `    │   A    │   S    │   D    │   F    │   G    │                          │   H    │   J    │   K    │   L    │  : ;   │   " '  │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │  Ctrl  │   Z    │   X    │   C    │   V    │   B    │  Alt   │        │  Alt   │   N    │   M    │   ,<   │   .>   │   /?   │ Enter  │
+    │  Ctrl  │   Z    │   X    │   C    │   V    │   B    │  Alt   │        │Colemak │   N    │   M    │   ,<   │   .>   │   /?   │ Enter  │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │ cmd    │ Shift  │MO-LOWER│                 │MO-RAISE│ Space  │ cmd    │
                                    └────────┴────────┴────────┘                 └────────┴────────┴────────┘
 */
   [_QUERTY] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_GRAVE,
+     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_BSPC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+     KC_GRAVE,KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_LALT,      TO(COLEMAK), KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLASH, KC_ENT,
+     KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_LALT,      TO(_COLEMAK), KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLASH, KC_ENT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                    KC_LGUI, KC_LSFT,   LOWER,                    RAISE,  KC_SPC,   KC_RGUI
+                                    KC_LGUI, KC_SHLK, KC_LOWR,                   KC_RASE,  KC_SPC, KC_RGUI
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
@@ -178,4 +181,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   )
 };
+
+// Enable the ctrl+backspace (KC_BSPC) to function as delete forward (KC_DEL)
+uint8_t mod_state;
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    mod_state = get_mods();
+    switch (keycode) {
+        case KC_BSPC: {
+            static bool delkey_registered;
+            if (record->event.pressed) { // on key-down of Backspace
+                if (mod_state & MOD_MASK_CTRL) {
+                    // Ctrl + Backspace -> Forward Delete
+                    del_mods(MOD_MASK_CTRL);
+                    register_code(KC_DEL);
+                    delkey_registered = true;
+                    set_mods(mod_state);
+                    return false;
+                }
+            } else { // on release of Backspace
+                if (delkey_registered) {
+                    unregister_code(KC_DEL);
+                    delkey_registered = false;
+                    return false;
+                }
+            }
+            return true;
+        };
+        break;
+    }
+    return true;
+};
+
 
