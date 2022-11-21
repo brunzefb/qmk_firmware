@@ -24,6 +24,7 @@
 #define G_TAB LGUI(KC_TAB)
 #define A_TAB LALT(KC_TAB)
 
+
 #define SFLK TD(SFT_LCK)     // alias for tapdance
 
 //layer shorthands
