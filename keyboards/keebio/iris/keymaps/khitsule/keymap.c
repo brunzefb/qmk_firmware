@@ -19,7 +19,7 @@ enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   GAME,
   LOWER,
-  RAISE,
+  RAISE
   ADJUST
 };
 
