@@ -15,6 +15,8 @@ enum custom_keycodes {
   LOWER,
   RAISE,
   ADJUST,
+  FIND_G, // VSCode Replace in files Shift+Cmd+H
+  FIND_L, // VSCode Replace in this file Option+Cmd+F
 };
 
 enum custom_tapdances {
@@ -22,6 +24,8 @@ enum custom_tapdances {
 };
 
 // Shift vs. capslock function. From bbaserdem's Planck keymap (since deprecated).
+// Tapping left shift twice in a row enables caps lock. Doing it again disables Caps lock mode.
+// Holding shift works just like normal.
 void caps_tap (qk_tap_dance_state_t *state, void *user_data) {
     if (state->count == 1) {
         register_code (KC_LSFT);
@@ -131,7 +135,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
     │   F1   │   F2   │   F3   │   F4   │  F5    │  F6    │                          │  F7    │   F8   │   F9   │  F10   │  F11   │  F12   │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │  RGB   │        │        │        │        │        │                          │        │        │        │        │ Home   │  PgUp  │
+    │  RGB   │        │        │        │        │        │                          │ ReplGlo│RepLoc  │        │        │ Home   │  PgUp  │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
     │        │        │        │        │        │        │                          │   ←    │   ↓    │   ↑    │   →    │  End   │PageDown│
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -144,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                              KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     RGB_TOG, _______, _______, _______, _______, _______,                            _______, _______, _______, _______, KC_HOME, KC_PGUP,
+     RGB_TOG, _______, _______, _______, _______, _______,                           LSG(KC_H),LAG(KC_F),_______,_______, KC_HOME, KC_PGUP,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______, _______, _______, _______, _______, _______,                            KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT,KC_END,  KC_PGDN,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
