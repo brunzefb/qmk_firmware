@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Number of Combos */
 #define COMBO_COUNT 1
 #define COMBO_TERM 200
+#define NO_MUSIC_MODE
 
 /* key matrix size */
 // Rows are doubled-up
