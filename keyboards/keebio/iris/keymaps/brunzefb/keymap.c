@@ -5,14 +5,23 @@
 #define _LOWER 2
 #define _RAISE 3
 #define _ADJUST 4
-#define KC_SHLK TD(TD_SHFT_CAPS)
-#define KC_SPLO LT(_LOWER, KC_SPACE)
-#define KC_RASE MO(_RAISE)
-#define KC_COPY LGUI(KC_C)
-#define KC_PASTE LGUI(KC_V)
-#define KC_CUT LGUI(KC_X)
-#define KC_UNDO LGUI(KC_Z)
-#define KC_REDO MT(MOD_LGUI | MOD_LSFT, KC_Z)
+
+#define KC_SHLK TD(TD_SHFT_CAPS)               // tap Shift twice in a row to toggle CAPS LOCK, press and hold to get Shift
+#define KC_SPLO LT(_LOWER, KC_SPACE)           // tap to get space, hold for switch to LOWER layer
+#define KC_RASE MO(_RAISE)                     // hold to go to RAISE layer
+#define KC_COPY LGUI(KC_C)                     // cmd +c
+#define KC_PASTE LGUI(KC_V)                    // cmd + v
+#define KC_CUT LGUI(KC_X)                      // cmd + x
+#define KC_UNDO LGUI(KC_Z)                     // cmd + z
+#define KC_REDO MT(MOD_LGUI | MOD_LSFT, KC_Z)  // cmd + shift + Z
+
+// https://andywarburton.co.uk/fix-mac-osx-volume-keys-not-working-with-via-qmk/
+#define MAC_VOLUME_UP 0x80
+#define MAC_VOLUME_DOWN 0x81
+#define MAC_MUTE 0x7f
+#define K_VOLUP A(G(MAC_VOLUME_UP))
+#define K_VOLDN A(G(MAC_VOLUME_DOWN))
+#define K_MUTE A(G(MAC_MUTE))
 
 enum custom_keycodes {
   COLEMAK = SAFE_RANGE,
@@ -155,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, _______,                            _______, LAG(KC_F),KC_UP, LSG(KC_H),KC_PGUP, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     QK_BOOT, KC_MUTE, KC_VOLU, KC_VOLD, _______, _______,                            KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT,KC_PGDN, KC_END,
+     QK_BOOT, K_MUTE,  K_VOLUP, K_VOLDN, _______, _______,                            KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT,KC_PGDN, KC_END,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      KC_PWR,  _______, _______, _______, _______, _______,  _______,         _______, _______, KC_PASTE,KC_COPY, KC_CUT,  KC_UNDO, KC_REDO,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
