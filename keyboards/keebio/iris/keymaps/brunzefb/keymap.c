@@ -9,11 +9,13 @@
 #define KC_SHLK TD(TD_SHFT_CAPS)               // tap Shift twice in a row to toggle CAPS LOCK, press and hold to get Shift
 #define KC_SPLO LT(_LOWER, KC_SPACE)           // tap to get space, hold for switch to LOWER layer
 #define KC_RASE MO(_RAISE)                     // hold to go to RAISE layer
-#define KC_COPY LGUI(KC_C)                     // cmd +c
-#define KC_PASTE LGUI(KC_V)                    // cmd + v
-#define KC_CUT LGUI(KC_X)                      // cmd + x
-#define KC_UNDO LGUI(KC_Z)                     // cmd + z
-#define KC_REDO MT(MOD_LGUI | MOD_LSFT, KC_Z)  // cmd + shift + Z
+#define KC_COPY LGUI(KC_C)                     // cmd + c, copy
+#define KC_PASTE LGUI(KC_V)                    // cmd + v, paste
+#define KC_CUT LGUI(KC_X)                      // cmd + x, cut
+#define KC_UNDO LGUI(KC_Z)                     // cmd + z, undo
+#define KC_SALL LGUI(KC_A)                     // cmd + a, select all
+#define KC_REDO MT(MOD_LGUI | MOD_LSFT, KC_Z)  // cmd + shift + Z, redo
+
 
 // https://andywarburton.co.uk/fix-mac-osx-volume-keys-not-working-with-via-qmk/
 #define MAC_VOLUME_UP 0x80
@@ -31,10 +33,12 @@ enum custom_keycodes {
   ADJUST,
   FIND_G, // VSCode Replace in files Shift+Cmd+H
   FIND_L, // VSCode Replace in this file Option+Cmd+F
+  SIG
 };
 
 enum custom_tapdances {
    TD_SHFT_CAPS = 0,
+   TD_MEDIA
 };
 
 // Shift vs. capslock function. From bbaserdem's Planck keymap (since deprecated).
@@ -57,9 +61,23 @@ void caps_tap_end (qk_tap_dance_state_t *state, void *user_data) {
     }
 }
 
+void dance_media(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        tap_code(KC_MPLY); // media play
+    } else if (state->count == 2) {
+        tap_code(KC_MNXT); // media next
+    } else if (state->count == 3) {
+        tap_code(KC_MPRV); // media previous
+    } else {
+        reset_tap_dance(state);
+    }
+}
+
+
 qk_tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Shift, twice for Caps Lock, this is an on off toggle.
-    [TD_SHFT_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED( caps_tap, NULL, caps_tap_end)
+    [TD_SHFT_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED( caps_tap, NULL, caps_tap_end),
+    [TD_MEDIA] = ACTION_TAP_DANCE_FN(dance_media)
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -153,7 +171,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
     │  Reset │  Mute  │ Vol UP │ VolDwn │        │        │                          │  Home  │   ←    │   ↓    │   →    │PageDown│  End   │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │  POWER │        │        │        │        │        │        │        │        │        │ Paste  │  Copy  │  Cut   │  Undo  │ Redo   │
+    │        │  Play  │  Next  │ Prev   │        │        │        │        │        │ SelAll │ Paste  │  Copy  │  Cut   │  Undo  │ Redo   │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │                 │        │        │        │
                                    └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -166,7 +184,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      QK_BOOT, K_MUTE,  K_VOLUP, K_VOLDN, _______, _______,                            KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT,KC_PGDN, KC_END,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_PWR,  _______, _______, _______, _______, _______,  _______,         _______, _______, KC_PASTE,KC_COPY, KC_CUT,  KC_UNDO, KC_REDO,
+     SIG,     KC_MPLY, KC_MNXT, KC_MPRV, _______, _______, _______,          _______, KC_SALL, KC_PASTE,KC_COPY, KC_CUT,  KC_UNDO, KC_REDO,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -205,6 +223,11 @@ uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     mod_state = get_mods();
     switch (keycode) {
+        case SIG:
+            if (record->event.pressed) {
+                SEND_STRING("Best regards,\nFriedrich Brunzema");
+            }
+        break;
         case KC_BSPC: {
             static bool delkey_registered;
             if (record->event.pressed) { // on key-down of Backspace
