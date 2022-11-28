@@ -21,9 +21,16 @@
 #define MAC_VOLUME_UP 0x80
 #define MAC_VOLUME_DOWN 0x81
 #define MAC_MUTE 0x7f
-#define K_VOLUP A(G(MAC_VOLUME_UP))
+#define MAC_PLAY_PREV 0x7c
+#define MAC_PLAY_PAUSE 0x7d
+#define MAC_PLAY_NEXT 0x7e
+#define K_VOLUP A(G(MAC_VOLUME_UP))   // any key macro
 #define K_VOLDN A(G(MAC_VOLUME_DOWN))
 #define K_MUTE A(G(MAC_MUTE))
+#define K_PLNX A(G(MAC_PLAY_NEXT))
+#define K_PPREV A(G(MAC_PLAY_PREV))
+#define K_PLAYP A(G(MAC_PLAY_PAUSE))
+#define K_PLNX A(G(MAC_PLAY_NEXT))
 
 enum custom_keycodes {
   COLEMAK = SAFE_RANGE,
@@ -38,7 +45,6 @@ enum custom_keycodes {
 
 enum custom_tapdances {
    TD_SHFT_CAPS = 0,
-   TD_MEDIA
 };
 
 // Shift vs. capslock function. From bbaserdem's Planck keymap (since deprecated).
@@ -61,23 +67,9 @@ void caps_tap_end (qk_tap_dance_state_t *state, void *user_data) {
     }
 }
 
-void dance_media(qk_tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        tap_code(KC_MPLY); // media play
-    } else if (state->count == 2) {
-        tap_code(KC_MNXT); // media next
-    } else if (state->count == 3) {
-        tap_code(KC_MPRV); // media previous
-    } else {
-        reset_tap_dance(state);
-    }
-}
-
-
 qk_tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Shift, twice for Caps Lock, this is an on off toggle.
     [TD_SHFT_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED( caps_tap, NULL, caps_tap_end),
-    [TD_MEDIA] = ACTION_TAP_DANCE_FN(dance_media)
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -171,7 +163,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
     │  Reset │  Mute  │ Vol UP │ VolDwn │        │        │                          │  Home  │   ←    │   ↓    │   →    │PageDown│  End   │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │        │  Play  │  Next  │ Prev   │        │        │        │        │        │ SelAll │ Paste  │  Copy  │  Cut   │  Undo  │ Redo   │
+    │Signatur│  Play  │  Next  │ Prev   │        │        │        │        │        │ SelAll │ Paste  │  Copy  │  Cut   │  Undo  │ Redo   │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │                 │        │        │        │
                                    └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -180,11 +172,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                              KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, _______,                            _______, LAG(KC_F),KC_UP, LSG(KC_H),KC_PGUP, _______,
+     RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, _______,                            SIG,     LAG(KC_F),KC_UP, LSG(KC_H),KC_PGUP, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      QK_BOOT, K_MUTE,  K_VOLUP, K_VOLDN, _______, _______,                            KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT,KC_PGDN, KC_END,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     SIG,     KC_MPLY, KC_MNXT, KC_MPRV, _______, _______, _______,          _______, KC_SALL, KC_PASTE,KC_COPY, KC_CUT,  KC_UNDO, KC_REDO,
+     _______,   K_PPREV, K_PLAYP, K_PLNX,  _______, _______, _______,          _______, KC_SALL, KC_PASTE,KC_COPY, KC_CUT,  KC_UNDO, KC_REDO,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -253,5 +245,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 };
-
-
