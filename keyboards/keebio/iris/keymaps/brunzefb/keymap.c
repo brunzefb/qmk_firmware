@@ -21,16 +21,11 @@
 #define MAC_VOLUME_UP 0x80
 #define MAC_VOLUME_DOWN 0x81
 #define MAC_MUTE 0x7f
-#define MAC_PLAY_PREV 0x7c
-#define MAC_PLAY_PAUSE 0x7d
-#define MAC_PLAY_NEXT 0x7e
+
 #define K_VOLUP A(G(MAC_VOLUME_UP))   // any key macro
 #define K_VOLDN A(G(MAC_VOLUME_DOWN))
 #define K_MUTE A(G(MAC_MUTE))
-#define K_PLNX A(G(MAC_PLAY_NEXT))
-#define K_PPREV A(G(MAC_PLAY_PREV))
-#define K_PLAYP A(G(MAC_PLAY_PAUSE))
-#define K_PLNX A(G(MAC_PLAY_NEXT))
+
 
 enum custom_keycodes {
   COLEMAK = SAFE_RANGE,
@@ -159,11 +154,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
     │   F1   │   F2   │   F3   │   F4   │  F5    │  F6    │                          │  F7    │   F8   │   F9   │  F10   │  F11   │  F12   │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │RGB_TOG │        │        │        │        │        │                          │        │RepLoc  │   ↑    │ ReplGlo│ PgUp   │        │
+    │RGB_TOG │        │        │        │        │        │                          │  Sig   │RepLoc  │   ↑    │ ReplGlo│ PgUp   │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
     │  Reset │  Mute  │ Vol UP │ VolDwn │        │        │                          │  Home  │   ←    │   ↓    │   →    │PageDown│  End   │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │Signatur│  Play  │  Next  │ Prev   │        │        │        │        │        │ SelAll │ Paste  │  Copy  │  Cut   │  Undo  │ Redo   │
+    │        │  Play  │  Next  │ Prev   │        │        │        │        │        │ SelAll │ Paste  │  Copy  │  Cut   │  Undo  │ Redo   │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │                 │        │        │        │
                                    └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -176,7 +171,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      QK_BOOT, K_MUTE,  K_VOLUP, K_VOLDN, _______, _______,                            KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT,KC_PGDN, KC_END,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______,  K_PPREV, K_PLAYP, K_PLNX,  _______, _______, _______,          _______,KC_SALL, KC_PASTE,KC_COPY, KC_CUT,  KC_UNDO, KC_REDO,
+     _______, _______, _______, _______, _______, _______, _______,          _______, KC_SALL, KC_PASTE,KC_COPY, KC_CUT,  KC_UNDO, KC_REDO,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
