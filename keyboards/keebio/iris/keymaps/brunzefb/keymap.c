@@ -226,6 +226,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SIG:
             if (record->event.pressed) {
                 SEND_STRING("Best regards,\nFriedrich Brunzema");
+
             }
         break;
         case KC_BSPC: {
