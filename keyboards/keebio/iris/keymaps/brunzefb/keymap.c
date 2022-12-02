@@ -8,7 +8,8 @@
 
 #define KC_SHLK TD(TD_SHFT_CAPS)               // tap Shift twice in a row to toggle CAPS LOCK, press and hold to get Shift
 #define KC_SPLO LT(_LOWER, KC_SPACE)           // tap to get space, hold for switch to LOWER layer
-#define KC_RASE MO(_RAISE)                     // hold to go to RAISE layer
+#define KC_RASE LT(_RAISE, KC_BSPC)            // tap for backspace hold to go to RAISE layer
+#define KC_ADJU MO(_ADJUST)                    // hold to go to ADJUST layer
 #define KC_COPY LGUI(KC_C)                     // cmd + c, copy
 #define KC_PASTE LGUI(KC_V)                    // cmd + v, paste
 #define KC_CUT LGUI(KC_X)                      // cmd + x, cut
@@ -83,25 +84,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [_COLEMAK] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
+     KC_GRAVE,KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSLS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_GRAVE, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,   KC_N,    KC_E,    KC_I,    KC_O,    KC_ENT,
+     KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,   KC_N,    KC_E,    KC_I,    KC_O,    KC_ENT,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      KC_SHLK, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_RALT,       TO(_QUERTY), KC_K,   KC_H,    KC_COMM, KC_DOT,  KC_SLASH,KC_QUOT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                    KC_LCTL, KC_LALT, KC_LGUI,                   KC_RASE, KC_SPLO, KC_RGUI
+                                    KC_LCTL, KC_LALT, KC_LGUI,                   KC_RASE, KC_SPLO, KC_ADJU
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
 /* Querty
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │  Esc   │   1!   │   2@   │   3#   │   4$   │   5%   │                          │   6^   │   7&   │   8*   │   9(   │   0)   │  Bksp  │
+    │  ` .   │   1!   │   2@   │   3#   │   4$   │   5%   │                          │   6^   │   7&   │   8*   │   9(   │   0)   │  Bksp  │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
     │  Tab   │   Q    │   W    │   E    │   R    │   T    │                          │   Y    │   U    │   I    │   O    │   P    │  |\    │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │   `    │   A    │   S    │   D    │   F    │   G    │                          │   H    │   J    │   K    │   L    │  : ;   │ ENTER  │
+    │  Esc   │   A    │   S    │   D    │   F    │   G    │                          │   H    │   J    │   K    │   L    │  : ;   │ ENTER  │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
     │Sft/CaPS│   Z    │   X    │   C    │   V    │   B    │  Alt   │        │Colemak │   N    │   M    │   ,<   │   .>   │   /?   │ " '    │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
@@ -110,11 +111,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [_QUERTY] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
+     KC_GRAVE,KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_GRAVE,KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
+     KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      KC_SHLK, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_RALT,      TO(_COLEMAK), KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLASH,KC_QUOT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
@@ -152,32 +153,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Raise
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │   F1   │   F2   │   F3   │   F4   │  F5    │  F6    │                          │  F7    │   F8   │   F9   │  F10   │  F11   │  F12   │
+    │        │        │   F10  │   F11  │  F12   │        │                          │        │        │        │        │        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │RGB_TOG │        │        │        │        │        │                          │  Sig   │RepLoc  │   ↑    │ ReplGlo│ PgUp   │        │
+    │RGB_TOG │ RGB_MOD│   F7   │   F8   │  F9    │  Hue   │                          │  Sig   │RepLoc  │   ↑    │ ReplGlo│ PgUp   │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │  Reset │  Mute  │ Vol UP │ VolDwn │        │        │                          │  Home  │   ←    │   ↓    │   →    │PageDown│  End   │
+    │ Reset  │  Mute  │   F4   │   F5   │  F6    │  Sat   │                          │  Home  │   ←    │   ↓    │   →    │PageDown│  End   │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │        │  Play  │  Next  │ Prev   │        │        │        │        │        │ SelAll │ Paste  │  Copy  │  Cut   │  Undo  │ Redo   │
+    │ VolUp  │  VolDn │   F1   │   F2   │  F3    │  Inten │        │        │        │ SelAll │ Paste  │  Copy  │  Cut   │  Undo  │  Redo  │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │                 │        │        │        │
                                    └────────┴────────┴────────┘                 └────────┴────────┴────────┘
 */
   [_RAISE] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                              KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  _______,
+     _______, _______, KC_F10,  KC_F11,  KC_F12,  _______,                            _______, _______, _______, _______, _______, _______,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼───────x─┤
+     RGB_TOG, RGB_MOD, KC_F7,   KC_F8,   KC_F9,   RGB_HUI,                            SIG,     LAG(KC_F),KC_UP, LSG(KC_H),KC_PGUP, KC_F12,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, _______,                            SIG,     LAG(KC_F),KC_UP, LSG(KC_H),KC_PGUP, KC_F12,
-  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     QK_BOOT, K_MUTE,  K_VOLUP, K_VOLDN, _______, _______,                            KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT,KC_PGDN, KC_END,
+     QK_BOOT, K_MUTE,  KC_F4,   KC_F5,   KC_F6,   RGB_SAI,                            KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT,KC_PGDN, KC_END,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, _______, _______, _______,          _______, KC_SALL, KC_PASTE,KC_COPY, KC_CUT,  KC_UNDO, KC_REDO,
+     K_VOLUP, K_VOLDN, KC_F1,   KC_F2,   KC_F3,   RGB_VAI, _______,          _______, KC_SALL, KC_PASTE,KC_COPY, KC_CUT,  KC_UNDO, KC_REDO,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
-/* Customize for future use
+/* Adjust / WindowMgr
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
     │        │        │        │        │        │        │                          │        │        │        │        │        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -210,6 +211,7 @@ uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     mod_state = get_mods();
     switch (keycode) {
+
         case SIG:
             if (record->event.pressed) {
                 SEND_STRING("Best regards,\nFriedrich Brunzema");
@@ -219,9 +221,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_BSPC: {
             static bool delkey_registered;
             if (record->event.pressed) { // on key-down of Backspace
-                if (mod_state & MOD_MASK_CTRL) {
-                    // Ctrl + Backspace -> Forward Delete
-                    del_mods(MOD_MASK_CTRL);
+                if ((mod_state & MOD_MASK_CTRL) || (mod_state & MOD_MASK_SHIFT)) {
+                    // Ctrl + Backspace, or Shift + Backspace -> Forward Delete
+                    if (mod_state & MOD_MASK_CTRL)
+                        del_mods(MOD_MASK_CTRL);
+                    if (mod_state & MOD_MASK_SHIFT)
+                        del_mods(MOD_MASK_SHIFT);
                     register_code(KC_DEL);
                     delkey_registered = true;
                     set_mods(mod_state);
@@ -236,6 +241,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return true;
         };
+
         break;
     }
     return true;
