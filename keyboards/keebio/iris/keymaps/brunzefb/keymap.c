@@ -8,7 +8,6 @@
 
 #define KC_SHLK TD(TD_SHFT_CAPS)               // tap Shift twice in a row to toggle CAPS LOCK, press and hold to get Shift
 #define KC_SPLO LT(_LOWER, KC_SPACE)           // tap to get space, hold for switch to LOWER layer
-#define KC_RASE LT(_RAISE, KC_BSPC)            // tap for backspace hold to go to RAISE layer
 #define KC_ADJU MO(_ADJUST)                    // hold to go to ADJUST layer
 #define KC_COPY LGUI(KC_C)                     // cmd + c, copy
 #define KC_PASTE LGUI(KC_V)                    // cmd + v, paste
@@ -16,6 +15,8 @@
 #define KC_UNDO LGUI(KC_Z)                     // cmd + z, undo
 #define KC_SALL LGUI(KC_A)                     // cmd + a, select all
 #define KC_REDO LSG(KC_Z)                      // cmd + shift + Z, redo
+#define KC_RASE MO(_RAISE)
+#define KC_LOWR MO(_LOWER)
 
 
 // https://andywarburton.co.uk/fix-mac-osx-volume-keys-not-working-with-via-qmk/
@@ -88,11 +89,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                               KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_MINUS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,   KC_N,    KC_E,    KC_I,     KC_O,    KC_ENT,
+     KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,   KC_N,     KC_E,    KC_I,     KC_O,    KC_ENT,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_SHLK, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_RALT,          RAISE,   KC_K,   KC_H,    KC_COMM, KC_DOT,  KC_SLASH,KC_QUOT,
+     KC_SHLK, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_RALT,          KC_RASE,   KC_K,   KC_H,   KC_COMM, KC_DOT,  KC_SLASH,KC_QUOT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                    KC_LCTL, KC_LALT, KC_LGUI,                   LOWER,   KC_SPACE,KC_ADJU
+                                    KC_LCTL, KC_LALT, KC_LGUI,                   KC_LOWR,   KC_SPACE,KC_ADJU
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
@@ -117,9 +118,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_SHLK, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_RALT,          RAISE,   KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLASH,KC_QUOT,
+     KC_SHLK, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_RALT,          KC_RASE,   KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLASH,KC_QUOT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                    KC_LCTL, KC_LALT, KC_LGUI,                   LOWER  , KC_SPACE,KC_ADJU
+                                    KC_LCTL, KC_LALT, KC_LGUI,                   KC_LOWR, KC_SPACE,KC_ADJU
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
@@ -153,26 +154,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Raise
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │        │        │   F10  │   F11  │  F12   │        │                          │        │        │        │        │        │        │
+    │        │        │   F10  │   F11  │  F12   │        │                          │ Home   │        │  End   │        │        │ RepLoc │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │RGB_TOG │ RGB_MOD│   F7   │   F8   │  F9    │  Hue   │                          │  Sig   │RepLoc  │   ↑    │ ReplGlo│ PgUp   │        │
+    │RGB_TOG │ RGB_MOD│   F7   │   F8   │  F9    │  Hue   │                          │ Copy   │   ↑    │ Paste  │ PgUp   │ Redo   │ RepGlo │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │ Reset  │  Mute  │   F4   │   F5   │  F6    │  Sat   │                          │  Home  │   ←    │   ↓    │   →    │PageDown│  End   │
+    │ Reset  │  Mute  │   F4   │   F5   │  F6    │  Sat   │                          │   ←    │   ↓    │   →    │PageDown│    │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │ VolUp  │  VolDn │   F1   │   F2   │  F3    │  Inten │        │        │        │ SelAll │ Paste  │  Copy  │  Cut   │  Undo  │  Redo  │
+    │ VolUp  │  VolDn │   F1   │   F2   │  F3    │  Inten │        │        │        │ SelAll │  Cut   │  Undo  │        │        │        │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │                 │        │        │        │
                                    └────────┴────────┴────────┘                 └────────┴────────┴────────┘
 */
   [_RAISE] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     _______, _______, KC_F10,  KC_F11,  KC_F12,  _______,                            _______, _______, _______, _______, _______, _______,
-  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼───────x─┤
-     RGB_TOG, RGB_MOD, KC_F7,   KC_F8,   KC_F9,   RGB_HUI,                            SIG,     LAG(KC_F),KC_UP, LSG(KC_H),KC_PGUP, KC_F12,
+     _______, _______, KC_F10,  KC_F11,  KC_F12,  _______,                            KC_COPY, _______, KC_PASTE,_______, _______, LAG(KC_F),
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     QK_BOOT, K_MUTE,  KC_F4,   KC_F5,   KC_F6,   RGB_SAI,                            KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT,KC_PGDN, KC_END,
+     RGB_TOG, RGB_MOD, KC_F7,   KC_F8,   KC_F9,   RGB_HUI,                            KC_HOME ,KC_UP,   KC_END,  KC_PGUP, KC_REDO, LSG(KC_H),
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     QK_BOOT, K_MUTE,  KC_F4,   KC_F5,   KC_F6,   RGB_SAI,                            KC_LEFT, KC_DOWN, KC_RIGHT,KC_PGDN, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     K_VOLUP, K_VOLDN, KC_F1,   KC_F2,   KC_F3,   RGB_VAI, _______,          _______, KC_SALL, KC_PASTE,KC_COPY, KC_CUT,  KC_UNDO, KC_REDO,
+     K_VOLUP, K_VOLDN, KC_F1,   KC_F2,   KC_F3,   RGB_VAI, _______,          _______, KC_SALL, KC_CUT,  KC_UNDO, _______, _______, _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
