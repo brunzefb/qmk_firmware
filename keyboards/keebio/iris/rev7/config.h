@@ -17,9 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-/* Number of Combos */
-#define COMBO_COUNT 1
-#define COMBO_TERM 200
+#define COMBO_VARIABLE_LEN
 #define NO_MUSIC_MODE
 
 /* key matrix size */
