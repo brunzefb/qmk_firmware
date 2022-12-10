@@ -24,6 +24,7 @@
 #define KC_RASE MO(_RAISE)
 #define KC_LOWR MO(_LOWER)
 
+#define TAPPING_TERM 200
 
 // https://andywarburton.co.uk/fix-mac-osx-volume-keys-not-working-with-via-qmk/
 #define MAC_VOLUME_UP 0x80
@@ -44,6 +45,11 @@ enum custom_keycodes {
   FIND_G, // VSCode Replace in files Shift+Cmd+H
   FIND_L, // VSCode Replace in this file Option+Cmd+F
   SIG,
+  KC_OCPRN,
+  KC_OCBRC,
+  KC_OCCBR,
+  KC_OCDQUO,
+  KC_OCQUOT
 };
 
 enum custom_tapdances {
@@ -124,34 +130,34 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_ESCLK, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_RALT,          KC_RASE,   KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLASH,KC_QUOT,
+     KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_RALT,          KC_RASE,   KC_N,   KC_M,    KC_COMM, KC_DOT, KC_SLASH,KC_OCDQUO,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     KC_LCTL, KC_LALT, KC_LGUI,                   KC_LOWR, KC_SPACE,KC_ADJU
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
-/* Lower
+/* Lower, Note: { ( [ " ' have hold to insert closing item after 200 ms of hold
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
     │ Explor │   !    │   @    │   #    │    $   │   %    │                          │ PRT    │ NUMLK  │   /    │   *    │   -    │ Back   │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │ CloseE │   `    │   {    │   *    │    }   │   +    │                          │ SCRLCK │   7    │   8    │   9    │   +    │   |    │
+    │Terminal│   `    │   {    │   *    │    }   │   +    │                          │ SCRLCK │   7    │   8    │   9    │   +    │   |    │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │Terminal│   _    │   (    │   =    │    )   │   -    │                          │ PAUSE  │   4    │   5    │   6    │   .    │Alt+Ent │
+    │   "    │   _    │   (    │   =    │    )   │   -    │                          │ PAUSE  │   4    │   5    │   6    │   .    │Alt+Ent │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │        │   !    │   [    │   &    │    ]   │   /?   │   \ |  │        │        │   0    │   1    │   2    │   3    │   =    │   "    │
+    │   '    │   !    │   [    │   &    │    ]   │   /?   │   \ |  │        │        │   0    │   1    │   2    │   3    │   =    │   "    │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                   │        │        │        │                 │        │        │        │
+    Ctrl+tab switches editors      │        │        │        │                 │        │        │        │
                                    └────────┴────────┴────────┘                 └────────┴────────┴────────┘
 */
   [_LOWER] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      KC_EXPL, KC_EXLM, KC_AMPR, KC_HASH, KC_DLR,  KC_PERC,                            KC_PSCR, KC_NUM,  KC_PSLS, KC_PAST, KC_PMNS, KC_BSPC,
  // ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_CLOS, KC_GRAVE,KC_LCBR, KC_ASTR, KC_RCBR, KC_PLUS,                            KC_SCRL, KC_P7,   KC_P8,   KC_P9,   KC_PPLS, KC_PIPE,
+     KC_TERM, KC_GRAVE,KC_OCCBR, KC_ASTR, KC_RCBR, KC_PLUS,                            KC_SCRL, KC_P7,   KC_P8,   KC_P9,   KC_PPLS, KC_PIPE,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_TERM, KC_UNDS, KC_LPRN, KC_EQL,  KC_RPRN, KC_MINS,                            KC_PAUS, KC_P4,   KC_P5,   KC_P6,   KC_PDOT, LALT_T(KC_PENT),
+     KC_OCDQUO,KC_UNDS,KC_OCPRN, KC_EQL,  KC_RPRN, KC_MINS,                            KC_PAUS, KC_P4,   KC_P5,   KC_P6,   KC_PDOT, LALT_T(KC_PENT),
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, KC_EXLM, KC_LBRC, KC_AMPR, KC_RBRC, KC_SLASH,KC_BSLASH,        _______, KC_P0,   KC_P1,   KC_P2,   KC_P3,   KC_PEQL, KC_DQT,
+     KC_OCQUOT,KC_EXLM, KC_OCBRC, KC_AMPR, KC_RBRC, KC_SLASH,KC_BSLASH,        _______, KC_P0,   KC_P1,   KC_P2,   KC_P3,   KC_PEQL, KC_DQT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -213,18 +219,47 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t* p_hash_timer);
+void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t* p_hash_timer) {
+    if(record->event.pressed) {
+        *p_hash_timer = timer_read();
+    } else {
+        if (timer_elapsed(*p_hash_timer) < TAPPING_TERM)
+            tap_code16(kc1);
+        else {
+            tap_code16(kc1);
+            tap_code16(kc2);
+            tap_code16(KC_LEFT);
+        }
+    }
+}
+
 // Enable the ctrl+backspace (KC_BSPC) to function as delete forward (KC_DEL)
 uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    static uint16_t my_hash_timer;
     mod_state = get_mods();
     switch (keycode) {
-
+        case KC_OCPRN:
+            handle_openclose(KC_LPRN, KC_RPRN, record, &my_hash_timer);
+            return false;
+        case KC_OCBRC:
+            handle_openclose(KC_LBRC, KC_RBRC, record, &my_hash_timer);
+            return false;
+        case KC_OCCBR:
+            handle_openclose(KC_LCBR, KC_RCBR, record, &my_hash_timer);
+            return false;
+        case KC_OCDQUO:
+            handle_openclose(KC_DQUO, KC_DQUO, record, &my_hash_timer);
+            return false;
+        case KC_OCQUOT:
+            handle_openclose(KC_QUOT, KC_QUOT, record, &my_hash_timer);
+            return false;
         case SIG:
             if (record->event.pressed) {
                 SEND_STRING("Best regards,\nFriedrich Brunzema");
-
             }
-        break;
+            break;
         case KC_BSPC: {
             static bool delkey_registered;
             if (record->event.pressed) { // on key-down of Backspace
