@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "secrets.h"
 #include "keymap_combo.h"
 
 #define _COLEMAK 0
@@ -7,7 +8,7 @@
 #define _RAISE 3
 #define _ADJUST 4
 
-#define KC_ESCLK TD(TD_SHFT_CAPS)               // tap ESC  twice in a row to toggle CAPS LOCK, press and hold to get Esc
+#define KC_ESCLK TD(TD_SHFT_CAPS)              // tap ESC  twice in a row to toggle CAPS LOCK, press and hold to get Esc
 #define KC_SPLO LT(_LOWER, KC_SPACE)           // tap to get space, hold for switch to LOWER layer
 #define KC_ADJU MO(_ADJUST)                    // hold to go to ADJUST layer
 #define KC_COPY LGUI(KC_C)                     // cmd + c, copy
@@ -18,7 +19,7 @@
 #define KC_REDO LSG(KC_Z)                      // cmd + shift + Z, redo
 #define KC_DUPL LSA(KC_DOWN)                   // shift+alt+down is duplicate line in VSCode
 #define KC_EXPL LSG(KC_E)                      // shift+cmd+e is view explorer file tree in VScode
-#define KC_CLOS LGUI(KC_W)                       // cmd+w close window
+#define KC_CLOS LGUI(KC_W)                     // cmd+w close window
 #define KC_TERM LCTL(KC_GRAVE)                 // ctrl+` is Terminal focus or toggle
 #define KC_CYCLE LCTL(KC_TAB)                  // ctrl+tab is cycle editor windows in VSCode
 #define KC_RASE MO(_RAISE)
@@ -82,6 +83,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+
 /* Colemak DHm
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
     │  ` ~   │   1!   │   2@   │   3#   │   4$   │   5%   │                          │   6^   │   7&   │   8*   │   9(   │   0)   │ Bksp   │
