@@ -1,4 +1,3 @@
-#include QMK_KEYBOARD_H
 #include "secrets.h"
 #include "keymap_combo.h"
 
@@ -296,18 +295,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("2"))));
           else if (record->event.pressed)
             SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("6")))SS_LGUI("k"));
-            tap_code16(LGUI(KC_UP));
-            SEND_STRING(SS_LGUI("w")SS_LGUI("K"));
             tap_code16(LGUI(KC_DOWN));
+            SEND_STRING(SS_LGUI("w")SS_LGUI("K"));
+            tap_code16(LGUI(KC_UP));
           return false;
         case BOTTOM:
           if (mod_state & MOD_MASK_GUI && record->event.pressed)
             SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("3"))));
           else if (record->event.pressed)
-            SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("5")))SS_LGUI("k"));
-            tap_code16(LGUI(KC_DOWN));
-            SEND_STRING(SS_LGUI("w")SS_LGUI("k"));
+            SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("5")))SS_DELAY(50)SS_LGUI("k"));
             tap_code16(LGUI(KC_UP));
+            SEND_STRING(SS_LGUI("w")SS_LGUI("k"));
+            tap_code16(LGUI(KC_DOWN));
           return false;
         case KC_BSPC: {
             static bool delkey_registered;
