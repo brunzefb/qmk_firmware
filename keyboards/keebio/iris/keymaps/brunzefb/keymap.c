@@ -33,6 +33,10 @@
 #define KC_TL LCA(KC_U)                        // WM Top left
 #define KC_TH LCA(KC_UP)                       // WM Top half
 #define KC_TR LCA(KC_I)                        // WM Top right
+#define KC_RTRM LAG(KC_RIGHT)                  // Focus next terminal in Group VSCode
+#define KC_LTRM LAG(KC_LEFT)                   // Focus previous terminal in Group
+#define KC_TRMR LGUI(LCTL(KC_RIGHT))           // Resize Terminal ->
+#define KC_TRML LGUI(LCTL(KC_LEFT))            // Resize Terminal <-
 
 #define TAPPING_TERM 200
 
@@ -59,7 +63,11 @@ enum custom_keycodes {
   KC_OCBRC,
   KC_OCCBR,
   KC_OCDQUO,
-  KC_OCQUOT
+  KC_OCQUOT,
+  LEFT,
+  RIGHT,
+  TOP,
+  BOTTOM
 };
 
 enum custom_tapdances {
@@ -155,7 +163,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
     │   "    │   _    │   (    │   =    │    )   │   -    │                          │ PAUSE  │   4    │   5    │   6    │   .    │Alt+Ent │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │   '    │   !    │   [    │   &    │    ]   │   /?   │   \ |  │        │        │   0    │   1    │   2    │   3    │   =    │   "    │
+    │   '    │   \ |  │   [    │   &    │    ]   │   /?   │        │        │        │   0    │   1    │   2    │   3    │   =    │   "    │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
     Ctrl+tab switches editors      │        │        │        │                 │        │        │        │
                                    └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -168,7 +176,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_OCDQUO,KC_UNDS,KC_OCPRN, KC_EQL,  KC_RPRN, KC_MINS,                            KC_PAUS, KC_P4,   KC_P5,   KC_P6,   KC_PDOT, LALT_T(KC_PENT),
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_OCQUOT,KC_EXLM, KC_OCBRC, KC_AMPR, KC_RBRC, KC_SLASH,KC_BSLASH,        _______, KC_P0,   KC_P1,   KC_P2,   KC_P3,   KC_PEQL, KC_DQT,
+    KC_OCQUOT,KC_BSLASH,KC_OCBRC,KC_AMPR, KC_RBRC, KC_SLASH,_______,        _______, KC_P0,   KC_P1,   KC_P2,   KC_P3,   KC_PEQL, KC_DQT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -204,13 +212,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Adjust / WindowMgr
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │QUERTY  │        │        │        │        │        │                          │        │        │        │        │        │        │
+    │QUERTY  │ Term → │ Term ← │        │        │        │                          │        │        │        │        │        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │COLEMAK │        │        │        │        │        │                          │        │WTopLeft│WTopHalf│WTopHalf│        │        │
+    │COLEMAK │SizeTrm→│SizeTrm←│  Ed ↑  │        │        │                          │        │WTopLeft│WTopHalf│WTopHalf│        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │        │        │        │        │        │        │                          │        │WLftHalf│ WMaxim │WRtHalf │        │        │
+    │        │        │ Ed ←   │        │  Ed →  │        │                          │        │WLftHalf│ WMaxim │WRtHalf │        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │        │        │        │        │        │        │        │        │        │        │WBotLeft│WBotHalf│WBotRigt│        │        │
+    │        │        │        │  Ed ↓  │        │        │        │        │        │        │WBotLeft│WBotHalf│WBotRigt│        │        │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │                 │        │        │        │
                                    └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -219,11 +227,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
  TO(_QUERTY), _______, _______, _______, _______, _______,                            _______, _______, _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
- TO(_COLEMAK), _______, _______, _______, _______, _______,                           _______, KC_TL,   KC_TH,   KC_TR,   _______, _______,
+ TO(_COLEMAK),_______, _______,  TOP,    _______, _______,                            _______, KC_TL,   KC_TH,   KC_TR,   _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, _______, _______,                            _______, KC_LH,   KC_FS,   KC_RH,   _______, _______,
+     _______, _______,  LEFT,   _______,  RIGHT,  _______,                            _______, KC_LH,   KC_FS,   KC_RH,   _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, _______, _______, _______,          _______, _______, KC_BL,   KC_BH,   KC_BOR,  _______, _______,
+     _______, _______, _______,  BOTTOM, _______, _______, _______,          _______, _______, KC_BL,   KC_BH,   KC_BOR,  _______, _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
@@ -270,7 +278,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 SEND_STRING("Best regards,\nFriedrich Brunzema");
             }
-            break;
+            return false;
+        case LEFT:
+          if (mod_state & MOD_MASK_GUI && record->event.pressed )
+            SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("4"))));
+          else if (record->event.pressed)
+            tap_code16(LGUI(LCTL(KC_LEFT)));
+          return false;
+        case RIGHT:
+          if (mod_state & MOD_MASK_GUI && record->event.pressed)
+            SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("1"))));
+          else if (record->event.pressed)
+            tap_code16(LGUI(LCTL(KC_RIGHT)));
+          return false;
+        case TOP:
+          if (mod_state & MOD_MASK_GUI && record->event.pressed)
+            SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("2"))));
+          else if (record->event.pressed)
+            SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("6")))SS_LGUI("k"));
+            tap_code16(LGUI(KC_UP));
+            SEND_STRING(SS_LGUI("w")SS_LGUI("K"));
+            tap_code16(LGUI(KC_DOWN));
+          return false;
+        case BOTTOM:
+          if (mod_state & MOD_MASK_GUI && record->event.pressed)
+            SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("3"))));
+          else if (record->event.pressed)
+            SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("5")))SS_LGUI("k"));
+            tap_code16(LGUI(KC_DOWN));
+            SEND_STRING(SS_LGUI("w")SS_LGUI("k"));
+            tap_code16(LGUI(KC_UP));
+          return false;
         case KC_BSPC: {
             static bool delkey_registered;
             if (record->event.pressed) { // on key-down of Backspace
