@@ -287,6 +287,7 @@ void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t*
 }
 
 // Enable the ctrl+backspace (KC_BSPC) to function as delete forward (KC_DEL)
+// also enables ctrl+alt+del on windows via ctrl+alt+backspace
 uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t my_hash_timer;
@@ -339,7 +340,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case LEFT: {
             static bool left_registered;
             if (record->event.pressed) {
-                SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("8"))));
+                if (mod_state & MOD_MASK_GUI) {
+                    clear_mods();
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("-"))));
+                    set_mods(mod_state);
+                }
+                else
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("8"))));
                 left_registered = true;
                 return false;
             } else {
@@ -354,12 +361,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case RIGHT: {
             static bool right_registered;
             if (record->event.pressed) {
-                SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("7"))));
+                if (mod_state & MOD_MASK_GUI) {
+                    clear_mods();
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("="))));
+                    set_mods(mod_state);
+                }
+                else
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("7"))));
                 right_registered = true;
                 return false;
             } else {
                 if (right_registered) {
-                    unregister_code(key_to_keycode_for_default_layer(RIGHT));
+                    unregister_code(key_to_keycode_for_default_layer(BOTTOM));
                     right_registered = false;
                     return false;
                 }
@@ -369,7 +382,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case TOP: {
             static bool top_registered;
             if (record->event.pressed) {
-                SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("0"))));
+                if (mod_state & MOD_MASK_GUI) {
+                    clear_mods();
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("["))));
+                    set_mods(mod_state);
+                }
+                else
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("0"))));
                 top_registered = true;
                 return false;
             } else {
@@ -381,15 +400,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return true;
         }
+
         case BOTTOM: {
             static bool bottom_registered;
             if (record->event.pressed) {
-                SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("9"))));
+                if (mod_state & MOD_MASK_GUI) {
+                    clear_mods();
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("]"))));
+                    set_mods(mod_state);
+                }
+                else
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("9"))));
                 bottom_registered = true;
                 return false;
             } else {
                 if (bottom_registered) {
-                    unregister_code(key_to_keycode_for_default_layer(BOTTOM));
+                    unregister_code(key_to_keycode_for_default_layer(TOP));
                     bottom_registered = false;
                     return false;
                 }
@@ -407,7 +433,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     set_mods(mod_state);
                     return false;
                 }
-            } else { // on release of Backspace
+            } else {
                 if (delkey_registered) {
                     unregister_code(KC_DEL);
                     delkey_registered = false;
