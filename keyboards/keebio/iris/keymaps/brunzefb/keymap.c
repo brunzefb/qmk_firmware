@@ -40,6 +40,7 @@ enum iris_layers {
 #define KC_TRMR LGUI(LCTL(KC_RIGHT))           // Resize Terminal ->
 #define KC_TRML LGUI(LCTL(KC_LEFT))            // Resize Terminal <-
 
+
 #define TAPPING_TERM 200
 
 // https://andywarburton.co.uk/fix-mac-osx-volume-keys-not-working-with-via-qmk/
@@ -213,21 +214,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
 /* Adjust / WindowMgr
-    ┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │QWERTY  │ Term → │ Term ← │        │        │        │                     │        │        │        │        │        │        │
-    ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │COLEMAK │SizeTrm→│SizeTrm←│  Ed ↑  │        │        │                     │        │WTopLeft│WTopHalf│WTopHalf│        │        │
-    ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │        │        │ Ed ←   │        │  Ed →  │        │                     │        │WLftHalf│ WMaxim │WRtHalf │        │        │
-    ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │TermPath│        │        │  Ed ↓  │        │        │        │   │        │        │WBotLeft│WBotHalf│WBotRigt│        │        │
-    └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                   │        │        │        │            │        │        │        │
-                                   └────────┴────────┴────────┘            └────────┴────────┴────────┘
+    ┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
+    │QUERTY  │ Term → │ Term ← │        │        │        │                          │<-Displ │        │        │        │        │Displ>  │
+    ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+    │COLEMAK │SizeTrm→│SizeTrm←│  Ed ↑  │        │        │                          │        │WTopLeft│WTopHalf│WTopHalf│        │        │
+    ├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+    │        │        │ Ed ←   │        │  Ed →  │        │                          │        │WLftHalf│ WMaxim │WRtHalf │        │        │
+    ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+    │        │        │        │  Ed ↓  │        │        │        │        │        │        │WBotLeft│WBotHalf│WBotRigt│        │        │
+    └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
+                                   │        │        │        │                 │        │        │        │
+                                   └────────┴────────┴────────┘                 └────────┴────────┴────────┘
 */
   [_ADJUST] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     QWERTY, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
+     QWERTY,  _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      COLEMAK, _______, _______,  TOP,    _______, _______,                       _______, KC_TL,   KC_TH,   KC_TR,   _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -241,6 +242,102 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t* p_hash_timer);
+void handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyrecord_t *record);
+void handle_top(bool isGui, bool isAlt);
+void handle_bottom(bool isGui, bool isAlt);
+void handle_left(bool isGui, bool isAlt);
+void handle_right(bool isGui, bool isAlt);
+
+void handle_top(bool isGui, bool isAlt) {
+  if (isGui)
+    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("3"))));
+  else if (isAlt) {
+    tap_code16(LGUI(KC_K));
+    tap_code16(LGUI(KC_DOWN));
+  } else {
+    tap_code16(LGUI(LCTL(KC_LEFT)));
+  }
+}
+
+void handle_bottom(bool isGui, bool isAlt) {
+  if (isGui)
+    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("2"))));
+  else if (isAlt) {
+    tap_code16(LGUI(KC_K));
+    tap_code16(LGUI(KC_DOWN));
+  } else {
+    tap_code16(LGUI(LCTL(KC_LEFT)));
+  }
+}
+
+void handle_left(bool isGui, bool isAlt) {
+  if (isGui)
+    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("4"))));
+  else if (isAlt) {
+    tap_code16(LGUI(KC_K));
+    tap_code16(LGUI(KC_LEFT));
+  } else {
+    tap_code16(LGUI(LCTL(KC_LEFT)));
+  }
+}
+
+void handle_right(bool isGui, bool isAlt) {
+  if (isGui)
+    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("1"))));
+  else if (isAlt) {
+    tap_code16(LGUI(KC_K));
+    tap_code16(LGUI(KC_RIGHT));
+  } else {
+    tap_code16(LGUI(LCTL(KC_RIGHT)));
+  }
+}
+
+void handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyrecord_t *record) {
+  uint16_t kc;
+  bool isColemak = default_layer_state == _COLEMAK;
+  void (*f_ptr)(bool, bool);
+  void (*f_ptr_top)(bool, bool) = &handle_top;
+  void (*f_ptr_bottom)(bool, bool) = &handle_bottom;
+  void (*f_ptr_left)(bool, bool) = &handle_left;
+  void (*f_ptr_right)(bool, bool) = &handle_right;
+
+  if (default_layer_state == _COLEMAK) {
+    switch (keycode) {
+      case TOP:
+        kc = isColemak ? KC_F : KC_E;
+        f_ptr = f_ptr_top;
+        break;
+      case RIGHT:
+        kc = isColemak? KC_T : KC_F;
+        f_ptr = f_ptr_right;
+        break;
+      case BOTTOM:
+        kc = isColemak ? KC_C : KC_C;
+        f_ptr = f_ptr_bottom;
+        break;
+      case LEFT:
+        kc = isColemak ? KC_R : KC_S;
+        f_ptr = f_ptr_left;
+        break;
+    }
+  }
+  *flag = false;
+  if (record->event.pressed ) {
+    clear_mods();
+    (*f_ptr)(mods & MOD_MASK_GUI, mods & MOD_MASK_ALT);
+    set_mods(mods);
+    register_code(kc);
+    *flag = true;
+  }
+  else {
+    if (*flag) {
+      unregister_code(kc);
+      *flag = false;
+    }
+    unregister_code(kc);
+  }
+}
+
 void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t* p_hash_timer) {
     if(record->event.pressed) {
         *p_hash_timer = timer_read();
@@ -255,7 +352,6 @@ void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t*
     }
 }
 
-
 // Enable the ctrl+backspace (KC_BSPC) to function as delete forward (KC_DEL)
 uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -267,7 +363,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 set_single_persistent_default_layer(_QWERTY);
             }
             return false;
-        case COLEMAK: 
+        case COLEMAK:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_COLEMAK);
             }
@@ -294,49 +390,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             SEND_STRING(SS_DELAY(500));
             tap_code16(LCTL(KC_GRAVE));
             tap_code16(LGUI(KC_V));
-  
+
             return false;
           }
           break;
         case LEFT: {
-          if (default_layer_state == _COLEMAK )
-            return false;
           static bool is_left_registered = false;
-          if (record->event.pressed ) {
-            del_mods(MOD_MASK_GUI);
-            del_mods(MOD_MASK_ALT);
-            if (mod_state & MOD_MASK_GUI)
-              SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("4"))));
-            else if (mod_state & MOD_MASK_ALT) {
-              tap_code16(LGUI(KC_K)); 
-              tap_code16(LGUI(KC_LEFT));
-            } else {
-              tap_code16(LGUI(LCTL(KC_LEFT)));
-            }
-            set_mods(mod_state);
-            register_code(KC_S);
-            is_left_registered = true;
-          }
-          else {
-            if (is_left_registered) {
-              unregister_code(KC_S);
-              is_left_registered = false;
-            }
-            unregister_code(KC_S);
-          }
+          handle_cursor(LEFT, mod_state, &is_left_registered, record);
           return false;
         }
-        case RIGHT:
-          if (record->event.pressed){
-            del_mods(MOD_MASK_GUI);
-            (mod_state & MOD_MASK_GUI) ? SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("1")))) :
-               tap_code16(LGUI(LCTL(KC_RIGHT)));
-            add_mods(MOD_BIT(KC_LGUI));
-            register_code(KC_F);
-          }
-          else
-            unregister_code(KC_F);
+        case RIGHT: {
+          static bool is_right_registered = false;
+          handle_cursor(RIGHT, mod_state, &is_right_registered, record);
           return false;
+        }
+
         case TOP:
           if (record->event.pressed){
             del_mods(MOD_MASK_GUI);
