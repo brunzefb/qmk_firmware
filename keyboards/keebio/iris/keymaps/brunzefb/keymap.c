@@ -263,6 +263,9 @@ uint16_t key_to_keycode_for_default_layer(int key) {
       case LEFT:
         kc = isColemak ? KC_R : KC_S;
         break;
+      case PATH:
+        kc = isColemak ? KC_LSHIFT : KC_LSHIFT;
+        break;
       default:
         kc = -1;
     }
@@ -314,16 +317,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_OCQUOT:
             handle_openclose(KC_QUOT, KC_QUOT, record, &my_hash_timer);
             return false;
-        case PATH:
-          if (record->event.pressed){
-            tap_code16(LGUI(LALT(KC_C)));
-            SEND_STRING(SS_DELAY(500));
-            tap_code16(LCTL(KC_GRAVE));
-            tap_code16(LGUI(KC_V));
-
-            return false;
-          }
-          break;
+        case PATH: {
+            static bool path_registered;
+            if (record->event.pressed) {
+              tap_code16(LGUI(LALT(KC_C)));
+                SEND_STRING(SS_DELAY(500));
+                tap_code16(LCTL(KC_GRAVE));
+                tap_code16(LGUI(KC_V));
+                tap_code16(KC_ENTER);
+                path_registered = true;
+                return false;
+            } else {
+                if (path_registered) {
+                    unregister_code(key_to_keycode_for_default_layer(PATH));
+                    path_registered = false;
+                    return false;
+                }
+            }
+            return true;
+        }
         case LEFT: {
             static bool left_registered;
             if (record->event.pressed) {
