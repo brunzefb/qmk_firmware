@@ -245,99 +245,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t* p_hash_timer);
 void handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyrecord_t *record);
-void handle_top(bool isGui, bool isAlt);
-void handle_bottom(bool isGui, bool isAlt);
-void handle_left(bool isGui, bool isAlt);
-void handle_right(bool isGui, bool isAlt);
+uint16_t key_to_keycode_for_default_layer(int key);
 
-void handle_top(bool isGui, bool isAlt) {
-  if (isGui)
-    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("3"))));
-  else if (isAlt) {
-    tap_code16(LGUI(KC_K));
-    tap_code16(LGUI(KC_DOWN));
-  } else {
-    tap_code16(LGUI(LCTL(KC_LEFT)));
-  }
-}
-
-void handle_bottom(bool isGui, bool isAlt) {
-  if (isGui)
-    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("2"))));
-  else if (isAlt) {
-    tap_code16(LGUI(KC_K));
-    tap_code16(LGUI(KC_DOWN));
-  } else {
-    tap_code16(LGUI(LCTL(KC_LEFT)));
-  }
-}
-
-void handle_left(bool isGui, bool isAlt) {
-  if (isGui)
-    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("4"))));
-  else if (isAlt) {
-    tap_code16(LGUI(KC_K));
-    tap_code16(LGUI(KC_LEFT));
-  } else {
-    tap_code16(LGUI(LCTL(KC_LEFT)));
-  }
-}
-
-void handle_right(bool isGui, bool isAlt) {
-  if (isGui)
-    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("1"))));
-  else if (isAlt) {
-    tap_code16(LGUI(KC_K));
-    tap_code16(LGUI(KC_RIGHT));
-  } else {
-    tap_code16(LGUI(LCTL(KC_RIGHT)));
-  }
-}
-
-void handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyrecord_t *record) {
-  uint16_t kc;
-  bool isColemak = default_layer_state == _COLEMAK;
-  void (*f_ptr)(bool, bool);
-  void (*f_ptr_top)(bool, bool) = &handle_top;
-  void (*f_ptr_bottom)(bool, bool) = &handle_bottom;
-  void (*f_ptr_left)(bool, bool) = &handle_left;
-  void (*f_ptr_right)(bool, bool) = &handle_right;
-
-  if (default_layer_state == _COLEMAK) {
-    switch (keycode) {
+uint16_t key_to_keycode_for_default_layer(int key) {
+    bool isColemak = default_layer_state == _COLEMAK;
+    uint16_t kc;
+    switch (key) {
       case TOP:
         kc = isColemak ? KC_F : KC_E;
-        f_ptr = f_ptr_top;
         break;
       case RIGHT:
         kc = isColemak? KC_T : KC_F;
-        f_ptr = f_ptr_right;
         break;
       case BOTTOM:
         kc = isColemak ? KC_C : KC_C;
-        f_ptr = f_ptr_bottom;
         break;
       case LEFT:
         kc = isColemak ? KC_R : KC_S;
-        f_ptr = f_ptr_left;
         break;
+      default:
+        kc = -1;
     }
-  }
-  *flag = false;
-  if (record->event.pressed ) {
-    clear_mods();
-    (*f_ptr)(mods & MOD_MASK_GUI, mods & MOD_MASK_ALT);
-    set_mods(mods);
-    register_code(kc);
-    *flag = true;
-  }
-  else {
-    if (*flag) {
-      unregister_code(kc);
-      *flag = false;
-    }
-    unregister_code(kc);
-  }
+    return kc;
 }
 
 void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t* p_hash_timer) {
@@ -385,7 +314,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_OCQUOT:
             handle_openclose(KC_QUOT, KC_QUOT, record, &my_hash_timer);
             return false;
-
         case PATH:
           if (record->event.pressed){
             tap_code16(LGUI(LALT(KC_C)));
@@ -397,43 +325,69 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           }
           break;
         case LEFT: {
-          static bool is_left_registered = false;
-          handle_cursor(LEFT, mod_state, &is_left_registered, record);
-          return false;
+            static bool left_registered;
+            if (record->event.pressed) {
+                SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("8"))));
+                left_registered = true;
+                return false;
+            } else {
+                if (left_registered) {
+                    unregister_code(key_to_keycode_for_default_layer(LEFT));
+                    left_registered = false;
+                    return false;
+                }
+            }
+            return true;
         }
         case RIGHT: {
-          static bool is_right_registered = false;
-          handle_cursor(RIGHT, mod_state, &is_right_registered, record);
-          return false;
-        }
-
-        case TOP:
-          if (record->event.pressed){
-            del_mods(MOD_MASK_GUI);
-            if(mod_state & MOD_MASK_GUI)
-              SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT(""))));
-            else {
-              SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("6")))SS_LGUI("k")); tap_code16(LGUI(KC_DOWN));
-              SEND_STRING(SS_LGUI("K")); tap_code16(LGUI(KC_UP));
+            static bool right_registered;
+            if (record->event.pressed) {
+                SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("7"))));
+                right_registered = true;
+                return false;
+            } else {
+                if (right_registered) {
+                    unregister_code(key_to_keycode_for_default_layer(RIGHT));
+                    right_registered = false;
+                    return false;
+                }
             }
-            add_mods(MOD_BIT(KC_LGUI));
-            register_code(KC_E);
-          }
-          else
-            unregister_code(KC_E);
-          return false;
-        case BOTTOM:
-          if (mod_state & MOD_MASK_GUI && record->event.pressed)
-            SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("3"))));
-          else if (record->event.pressed)
-            SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("5")))SS_DELAY(50)SS_LGUI("k")); tap_code16(LGUI(KC_UP));
-            SEND_STRING(("k")); tap_code16(LGUI(KC_DOWN));
-          return false;
+            return true;
+        }
+        case TOP: {
+            static bool top_registered;
+            if (record->event.pressed) {
+                SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("0"))));
+                top_registered = true;
+                return false;
+            } else {
+                if (top_registered) {
+                    unregister_code(key_to_keycode_for_default_layer(TOP));
+                    top_registered = false;
+                    return false;
+                }
+            }
+            return true;
+        }
+        case BOTTOM: {
+            static bool bottom_registered;
+            if (record->event.pressed) {
+                SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("9"))));
+                bottom_registered = true;
+                return false;
+            } else {
+                if (bottom_registered) {
+                    unregister_code(key_to_keycode_for_default_layer(BOTTOM));
+                    bottom_registered = false;
+                    return false;
+                }
+            }
+            return true;
+        }
         case KC_BSPC: {
             static bool delkey_registered;
-            if (record->event.pressed) { // on key-down of Backspace
+            if (record->event.pressed) {
                 if (mod_state & MOD_MASK_CTRL) {
-                    // Ctrl + Backspace, or Shift + Backspace -> Forward Delete
                     if (mod_state & MOD_MASK_CTRL)
                         del_mods(MOD_MASK_CTRL);
                     register_code(KC_DEL);
@@ -450,7 +404,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return true;
         };
-
         break;
     }
     return true;
