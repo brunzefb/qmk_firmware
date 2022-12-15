@@ -41,7 +41,8 @@ enum iris_layers {
 #define KC_MTRD LCAG(KC_RIGHT)                 // Rectangle: move to right display
 #define KC_HIRES LCAG(KC_F12)                  // SwitchResX: 4K
 #define KC_LORES LCAG(KC_F11)                  // SwitchResX: HD Res (edit prefs to assign shortcuts)
-
+#define KC_CPRV LCTL(KC_LBRC)                  // ctrl+[ is next file in code collaborator
+#define KC_CNXT LCTL(KC_RBRC)                  // ctrl+] is next file in code collaborator
 #define TAPPING_TERM 200
 
 // https://andywarburton.co.uk/fix-mac-osx-volume-keys-not-working-with-via-qmk/
@@ -224,7 +225,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │        │        │ Ed ←   │        │  Ed →  │        │                     │        │WLftHalf│ WMaxim │WRtHalf │        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │        │        │        │  Ed ↓  │        │        │        │   │        │        │WBotLeft│WBotHalf│WBotRigt│        │        │
+    │        │        │        │  Ed ↓  │ CPrev  │ CNext  │        │   │        │        │WBotLeft│WBotHalf│WBotRigt│        │        │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │            │        │        │        │
                                    └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -237,7 +238,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______, _______,  LEFT,   _______,  RIGHT,  _______,                       _______, KC_LH,   KC_FS,   KC_RH,   _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     PATH,    _______, _______,  BOTTOM, _______, _______, _______,     _______, _______, KC_BL,   KC_BH,   KC_BOR,  _______, _______,
+     PATH,    _______, _______,  BOTTOM, KC_CPRV, KC_CNXT, _______,     _______, _______, KC_BL,   KC_BH,   KC_BOR,  _______, _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,              _______, _______, _______
   //                               └────────┴────────┴────────┘            └────────┴────────┴────────┘
