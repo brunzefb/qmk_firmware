@@ -221,7 +221,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Adjust / WindowMgr
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │QUERTY  │        │        │MouseUp  MWheelUp│MWheelDw│        │                     │<-Displ │ LowRes │HighRes │        │        │Displ-> │
+    │QUERTY  │LtMouBtn│RtMouBtn│MouseUp  MWheelUp│MWheelDw│        │                     │<-Displ │ LowRes │HighRes │        │        │Displ-> │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │COLEMAK │        │MouseLt │  Ed ↑  │MouseRt │        │                     │        │WTopLeft│WTopHalf│WTopHalf│        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -234,7 +234,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [_ADJUST] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     QWERTY,  _______, _______, KC_MS_U, KC_WH_U, KC_WH_D,                       KC_MTLD, KC_LORES,KC_HIRES,_______, _______, KC_MTRD,
+     QWERTY,  KC_BTN1, KC_BTN2, KC_MS_U, KC_WH_U, KC_WH_D,                       KC_MTLD, KC_LORES,KC_HIRES,_______, _______, KC_MTRD,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      COLEMAK, _______, KC_MS_LEFT, TOP,  KC_MS_RIGHT, _______,                   _______, KC_TL,   KC_TH,   KC_TR,   _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -349,6 +349,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("-"))));
                     set_mods(mod_state);
                 }
+                else if (mod_state & MOD_MASK_CTRL) {
+                    clear_mods();
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("4"))));
+                    set_mods(mod_state);
+                }
                 else
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("8"))));
                 left_registered = true;
@@ -368,6 +373,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 if (mod_state & MOD_MASK_GUI) {
                     clear_mods();
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("="))));
+                    set_mods(mod_state);
+                }
+                else if (mod_state & MOD_MASK_CTRL) {
+                    clear_mods();
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("1"))));
                     set_mods(mod_state);
                 }
                 else
@@ -391,6 +401,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("["))));
                     set_mods(mod_state);
                 }
+                else if (mod_state & MOD_MASK_CTRL) {
+                    clear_mods();
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("3"))));
+                    set_mods(mod_state);
+                }
                 else
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("0"))));
                 top_registered = true;
@@ -410,6 +425,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 if (mod_state & MOD_MASK_GUI) {
                     clear_mods();
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("]"))));
+                    set_mods(mod_state);
+                }
+                else if (mod_state & MOD_MASK_CTRL) {
+                    clear_mods();
+                    SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("2"))));
                     set_mods(mod_state);
                 }
                 else
