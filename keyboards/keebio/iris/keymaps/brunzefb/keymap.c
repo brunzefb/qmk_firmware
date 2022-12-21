@@ -221,11 +221,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Adjust / WindowMgr
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │QUERTY  │LtMouBtn│RtMouBtn│MouseUp  MWheelUp│MWheelDw│        │                     │<-Displ │ LowRes │HighRes │        │        │Displ-> │
+    │QUERTY  │LtMouBtn│RtMouBtn│MouseUp  MWheelUp│MWheelDw│                     │<-Displ │ LowRes │HighRes │        │        │Displ-> │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │COLEMAK │        │MouseLt │  Ed ↑  │MouseRt │        │                     │        │WTopLeft│WTopHalf│WTopHalf│        │        │
+    │COLEMAK │        │        │  Ed ↑  │        │        │                     │        │WTopLeft│WTopHalf│WTopHalf│        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │        │        │ Ed ←   │MouseDn │  Ed →  │        │                     │        │WLftHalf│ WMaxim │WRtHalf │ mouse1 │ mouse2 │
+    │        │        │ Ed ←   │        │  Ed →  │        │                     │        │WLftHalf│ WMaxim │WRtHalf │ mouse1 │ mouse2 │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
     │        │        │        │  Ed ↓  │        │        │        │   │        │        │WBotLeft│WBotHalf│WBotRigt│ Cprev  │ Cnext  │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
@@ -329,6 +329,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING(SS_DELAY(500));
                 tap_code16(LCTL(KC_GRAVE));
                 tap_code16(LGUI(KC_V));
+                SEND_STRING(SS_DELAY(500));
                 tap_code16(KC_ENTER);
                 path_registered = true;
                 return false;
