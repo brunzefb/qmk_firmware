@@ -173,7 +173,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Lower, Note: { ( [ " ' have hold to insert closing item after 200 mhold
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │ Explor │   !    │   @    │   #    │    $   │   %    │                     │ RevSrch│        │        │        │        │        │
+    │ Explor │   !    │   @    │   #    │    $   │   %    │                     │ RevSrch│        │        │ RAlt   │ RCtl   │  Rshift│
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │Terminal│   `    │   {    │   *    │    }   │   +    │                     │ DupLn  │ Copy   │   ↑    │  Paste │ RepGlo │ RepLoc │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -186,7 +186,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [_LOWER] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                       ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_EXPL, KC_EXLM, KC_AMPR, KC_HASH, KC_DLR,   KC_PERC,                        KC_REVS, _______, _______, _______, _______, _______,
+     KC_EXPL, KC_EXLM, KC_AMPR, KC_HASH, KC_DLR,   KC_PERC,                        KC_REVS, _______, _______, KC_RALT, KC_RCTL,  KC_RSFT,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TERM, KC_GRAVE,KC_OCCBR, KC_ASTR, KC_RCBR, KC_PLUS,                        KC_DUPL, COPY,    KC_UP,   PASTE,  LSG(KC_H),LAG(KC_F),
   //├────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -243,11 +243,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
      QWERTY,  KC_BTN1, KC_BTN2, KC_MS_U, KC_WH_U, KC_WH_D,                       KC_MTLD, _______, _______, KC_LORES,KC_HIRES,KC_MTRD,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-     COLEMAK, _______, KC_MS_LEFT, TOP,  KC_MS_RIGHT, _______,                   _______, KC_TL,   KC_TH,   KC_TR,   _______, _______,
+     COLEMAK, _______, KC_MS_LEFT,TOP,   KC_MS_RIGHT, _______,                   _______, KC_TL,   KC_TH,   KC_TR,   _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-     LINUX,   _______,  LEFT,   KC_MS_DOWN,  RIGHT,  _______,                    _______, KC_LH,   KC_FS,   KC_RH,   KC_BTN1, KC_BTN2,
+     LINUX,   _______, LEFT,    KC_MS_DOWN,RIGHT, _______,                       _______, KC_LH,   KC_FS,   KC_RH,   KC_BTN1, KC_BTN2,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     PATH,    _______, _______,  BOTTOM, _______,  _______, _______,    _______, _______, KC_BL,   KC_BH,   KC_BOR,  KC_CPRV, KC_CNXT,
+     PATH,    _______, _______,  BOTTOM, _______, _______, _______,     _______, _______, KC_BL,   KC_BH,   KC_BOR,  KC_CPRV, KC_CNXT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,              _______, _______, _______
   //                               └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -295,6 +295,14 @@ void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t*
             tap_code16(KC_LEFT);
         }
     }
+}
+
+// handle auto-enable of numlock
+void led_set_keymap(uint8_t usb_led) {
+  if (!(usb_led & (1<<USB_LED_NUM_LOCK))) {
+    register_code(KC_NUM_LOCK);
+    unregister_code(KC_NUM_LOCK);
+  }
 }
 
 // Enable the ctrl+backspace (KC_BSPC) to function as delete forward (KC_DEL)
