@@ -507,10 +507,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     delkey_registered = true;
                     set_mods(mod_state);
                     return false;
+                } else if (mod_state & MOD_MASK_SHIFT) {
+                    del_mods(MOD_MASK_SHIFT);
+                    register_code(KC_DEL);
+                    delkey_registered = true;
+                    set_mods(mod_state);
+                    return false;
                 }
-                if (mod_state & MOD_MASK_SHIFT) {
-                  register_code(KC_DEL);
-                }
+
             } else {
                 if (delkey_registered) {
                     unregister_code(KC_DEL);
