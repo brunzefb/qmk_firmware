@@ -10,7 +10,6 @@ enum iris_layers {
   _ADJUST,
 };
 
-#define KC_ESCLK TD(TD_SHFT_CAPS)              // tap ESC  twice in a row to toggle CAPS LOCK, press and hold to get Esc
 #define KC_SPLO LT(_LOWER, KC_SPACE)           // tap to get space, hold for switch to LOWER layer
 #define KC_ADJU MO(_ADJUST)                    // hold to go to ADJUST layer
 #define KC_COPY LGUI(KC_C)                     // cmd + c, copy
@@ -52,6 +51,7 @@ enum iris_layers {
 #define MAC_VOLUME_DOWN 0x81
 #define MAC_MUTE 0x7f
 
+
 #define K_VOLUP A(G(MAC_VOLUME_UP))   // any key macro
 #define K_VOLDN A(G(MAC_VOLUME_DOWN))
 #define K_MUTE A(G(MAC_MUTE))
@@ -86,34 +86,6 @@ enum custom_keycodes {
   REDO
 };
 
-enum custom_tapdances {
-   TD_SHFT_CAPS = 0,
-};
-
-// Shift vs. capslock function. From bbaserdem's Planck keymap (since deprecated).
-// Tapping left shift twice in a row enables caps lock. Doing it again disables Caps lock mode.
-// Holding shift works just like normal.
-void caps_tap (qk_tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        register_code (KC_ESC);
-    } else if (state->count == 2) {
-        unregister_code (KC_ESC);
-        register_code (KC_CAPS);
-    }
-}
-
-void caps_tap_end (qk_tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        unregister_code (KC_LSFT);
-    } else {
-        unregister_code (KC_CAPS);
-    }
-}
-
-qk_tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for Shift, twice for Caps Lock, this is an on off toggle.
-    [TD_SHFT_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED( caps_tap, NULL, caps_tap_end),
-};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -132,7 +104,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [_COLEMAK] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_ESCLK,KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
+     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                          KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_MINUS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -159,7 +131,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [_QWERTY] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_ESCLK, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
+     KC_ESC,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                          KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TAB,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                          KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINUS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -173,7 +145,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Lower, Note: { ( [ " ' have hold to insert closing item after 200 mhold
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │ Explor │   !    │   @    │   #    │    $   │   %    │                     │ RevSrch│        │        │ RAlt   │ RCtl   │  Rshift│
+    │ Explor │   !    │   @    │   #    │    $   │   %    │                     │ RevSrch│ CapsLk │        │ RAlt   │ RCtl   │  Rshift│
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │Terminal│   `    │   {    │   *    │    }   │   +    │                     │ DupLn  │ Copy   │   ↑    │  Paste │ RepGlo │ RepLoc │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -186,7 +158,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [_LOWER] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                       ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_EXPL, KC_EXLM, KC_AMPR, KC_HASH, KC_DLR,   KC_PERC,                        KC_REVS, _______, _______, KC_RALT, KC_RCTL,  KC_RSFT,
+     KC_EXPL, KC_EXLM, KC_AMPR, KC_HASH, KC_DLR,   KC_PERC,                        KC_REVS, KC_CAPS, _______, KC_RALT, KC_RCTL,  KC_RSFT,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TERM, KC_GRAVE,KC_OCCBR, KC_ASTR, KC_RCBR, KC_PLUS,                        KC_DUPL, COPY,    KC_UP,   PASTE,  LSG(KC_H),LAG(KC_F),
   //├────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -234,7 +206,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │IsLinux │        │ Ed ←   │MouseDwn│  Ed →  │        │                     │        │WLftHalf│ WMaxim │WRtHalf │ mouse1 │ mouse2 │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │        │        │        │  Ed ↓  │        │        │        │   │        │        │WBotLeft│WBotHalf│WBotRigt│ Cprev  │ Cnext  │
+    │ Path   │        │        │  Ed ↓  │        │        │        │   │        │        │WBotLeft│WBotHalf│WBotRigt│ Cprev  │ Cnext  │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │            │        │        │        │
                                    └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -529,13 +501,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_BSPC: {
             static bool delkey_registered;
             if (record->event.pressed) {
-                if (mod_state & MOD_MASK_CTRL || mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_CTRL | MOD_MASK_SHIFT);
+                if (mod_state & MOD_MASK_CTRL) {
+                    del_mods(MOD_MASK_CTRL);
+                    register_code(KC_DEL);
+                    delkey_registered = true;
+                    set_mods(mod_state);
+                    return false;
+                } else if (mod_state & MOD_MASK_SHIFT) {
+                    del_mods(MOD_MASK_SHIFT);
                     register_code(KC_DEL);
                     delkey_registered = true;
                     set_mods(mod_state);
                     return false;
                 }
+
             } else {
                 if (delkey_registered) {
                     unregister_code(KC_DEL);
