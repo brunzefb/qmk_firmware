@@ -38,8 +38,8 @@ enum iris_layers {
 #define KC_LTRM LAG(KC_LEFT)                   // Focus previous terminal in Group
 #define KC_MTLD LCAG(KC_LEFT)                  // Rectangle: move to left display
 #define KC_MTRD LCAG(KC_RIGHT)                 // Rectangle: move to right display
-#define KC_HIRES LCAG(KC_F12)                  // SwitchResX: 4K
-#define KC_LORES LCAG(KC_F11)                  // SwitchResX: HD Res (edit prefs to assign shortcuts)
+#define KC_HIRES LCAG(KC_F11)                  // SwitchResX: 4K
+#define KC_LORES LCAG(KC_F12)                  // SwitchResX: HD Res (edit prefs to assign shortcuts)
 #define KC_CPRV LCTL(KC_LBRC)                  // ctrl+[ is next file in code collaborator
 #define KC_CNXT LCTL(KC_RBRC)                  // ctrl+] is next file in code collaborator
 #define KC_REVS LCTL(KC_R)                     // ctrl+R is search in terminal history
