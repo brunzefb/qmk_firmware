@@ -145,7 +145,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Lower, Note: { ( [ " ' have hold to insert closing item after 200 mhold
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │ Explor │   !    │   @    │   #    │    $   │   %    │                     │ RevSrch│ CapsLk │        │ RAlt   │ RCtl   │  Rshift│
+    │ Explor │   !    │   @    │   #    │    $   │   %    │                     │ RevSrch│ CapsLk │  \ |   │  RAlt  │ RCtl   │  Rshift│
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │Terminal│   `    │   {    │   *    │    }   │   +    │                     │ DupLn  │ Copy   │   ↑    │  Paste │ RepGlo │ RepLoc │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -158,7 +158,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [_LOWER] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                       ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_EXPL, KC_EXLM, KC_AMPR, KC_HASH, KC_DLR,   KC_PERC,                        KC_REVS, KC_CAPS, _______, KC_RALT, KC_RCTL,  KC_RSFT,
+     KC_EXPL, KC_EXLM, KC_AMPR, KC_HASH, KC_DLR,   KC_PERC,                        KC_REVS, KC_CAPS, KC_BSLS, KC_RALT, KC_RCTL,  KC_RSFT,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TERM, KC_GRAVE,KC_OCCBR, KC_ASTR, KC_RCBR, KC_PLUS,                        KC_DUPL, COPY,    KC_UP,   PASTE,  LSG(KC_H),LAG(KC_F),
   //├────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -200,26 +200,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Adjust / WindowMgr
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │QUERTY  │LtMouBtn│RtMouBtn│MouseUp  MWheelUp│MWheelDw│                     │<-Displ │        │        │ LowRes │ HiRes  │Displ-> │
+    │QUERTY  │LtMouBtn│RtMouBtn│MouseUp  MWheelUp│MWheelDw│                     │<-Displ │  Help  │   =    │ LowRes │ HiRes  │Displ-> │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │COLEMAK │        │MouseL  │  Ed ↑  │MouseR  │        │                     │        │WTopLeft│WTopHalf│WTopHalf│        │        │
+    │COLEMAK │        │MouseL  │  Ed ↑  │MouseR  │        │                     │MissCtl │WTopLeft│WTopHalf│WTopHalf│        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │IsLinux │        │ Ed ←   │MouseDwn│  Ed →  │        │                     │        │WLftHalf│ WMaxim │WRtHalf │ mouse1 │ mouse2 │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │ Path   │        │        │  Ed ↓  │        │        │        │   │        │        │WBotLeft│WBotHalf│WBotRigt│ Cprev  │ Cnext  │
+    │ Path   │        │        │  Ed ↓  │        │        │  Menu  │   │        │        │WBotLeft│WBotHalf│WBotRigt│ Cprev  │ Cnext  │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │            │        │        │        │
                                    └────────┴────────┴────────┘            └────────┴────────┴────────┘
 */
   [_ADJUST] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     QWERTY,  KC_BTN1, KC_BTN2, KC_MS_U, KC_WH_U, KC_WH_D,                       KC_MTLD, _______, _______, KC_LORES,KC_HIRES,KC_MTRD,
+     QWERTY,  KC_BTN1, KC_BTN2, KC_MS_U, KC_WH_U, KC_WH_D,                       KC_MTLD, KC_HELP, KC_PEQL, KC_LORES,KC_HIRES,KC_MTRD,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-     COLEMAK, _______, KC_MS_LEFT,TOP,   KC_MS_RIGHT, _______,                   _______, KC_TL,   KC_TH,   KC_TR,   _______, _______,
+     COLEMAK, _______, KC_MS_LEFT,TOP,   KC_MS_RIGHT, _______,                   KC_MCTL,  KC_TL,   KC_TH,   KC_TR,  _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      LINUX,   _______, LEFT,    KC_MS_DOWN,RIGHT, _______,                       _______, KC_LH,   KC_FS,   KC_RH,   KC_BTN1, KC_BTN2,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     PATH,    _______, _______,  BOTTOM, _______, _______, _______,     _______, _______, KC_BL,   KC_BH,   KC_BOR,  KC_CPRV, KC_CNXT,
+     PATH,    _______, _______,  BOTTOM, _______, KC_MENU, _______,     _______, _______, KC_BL,   KC_BH,   KC_BOR,  KC_CPRV, KC_CNXT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,              _______, _______, _______
   //                               └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -371,7 +371,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_PIPE:
             if (record->event.pressed) {
                 tap_code16(KC_PIPE);
-                tap_code16(KC_SPACE);
                 return false;
             }
         case PATH: {
