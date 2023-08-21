@@ -83,7 +83,8 @@ enum custom_keycodes {
   SALL,
   CUT,
   UNDO,
-  REDO
+  REDO,
+  TERMCLR
 };
 
 
@@ -176,7 +177,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │RGB_TOG │ RGB_MOD│   F7   │   F8   │  F9    │  Hue   │                     │ SCRLCK │   7    │   8    │   9    │   +    │   -    │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │ Reset  │ Mute   │   F4   │   F5   │  F6    │  Sat   │                     │ PAUSE  │   4    │   5    │   6    │   .    │Alt+Ent │
+    │ Reset  │ Mute   │   F4   │   F5   │  F6    │  Sat   │                     │CLEAR T │   4    │   5    │   6    │   .    │Alt+Ent │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
     │ Shift  │        │   F1   │   F2   │  F3    │  Inten │        │   │        │   0    │   1    │   2    │   3    │   =    │   "    │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
@@ -190,7 +191,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      RGB_TOG, RGB_MOD, KC_F7,   KC_F8,   KC_F9,   RGB_HUI,                       KC_SCRL, KC_P7,   KC_P8,   KC_P9,   KC_PPLS, KC_PIPE,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-     QK_BOOT, K_MUTE,  KC_F4,   KC_F5,   KC_F6,   RGB_SAI,                       KC_PAUS, KC_P4,   KC_P5,   KC_P6,   KC_PDOT, LALT_T(KC_PENT),
+     QK_BOOT, K_MUTE,  KC_F4,   KC_F5,   KC_F6,   RGB_SAI,                       TERMCLR, KC_P4,   KC_P5,   KC_P6,   KC_PDOT, LALT_T(KC_PENT),
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      KC_LSFT, _______, KC_F1,   KC_F2,   KC_F3,   RGB_VAI, _______,     _______, KC_P0,   KC_P1,   KC_P2,   KC_P3,   KC_PEQL, KC_DQT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
@@ -522,7 +523,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
             }
             return true;
-        };
+        }
+        case TERMCLR: {
+            static bool trm_registered;
+            if (record->event.pressed) {
+                tap_code16(LGUI(KC_K));
+                SEND_STRING(SS_DELAY(20));
+                tap_code16(LGUI(KC_V));
+                trm_registered = true;
+                return false;
+            } else {
+                if (trm_registered) {
+                    unregister_code(key_to_keycode_for_default_layer(TERMCLR));
+                    trm_registered = false;
+                    return false;
+                }
+            }
+        }
         case ALT_TAB:
           if (record->event.pressed) {
             set_mods(MOD_MASK_GUI);
