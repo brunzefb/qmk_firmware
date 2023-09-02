@@ -4,48 +4,47 @@
 #include "uthash.h"
 #include "circular_buffer.c"
 
-
 enum iris_layers {
-  _COLEMAK,
-  _QWERTY,
-  _LOWER,
-  _RAISE,
-  _ADJUST,
+    _COLEMAK,
+    _QWERTY,
+    _LOWER,
+    _RAISE,
+    _ADJUST,
 };
 
-#define KC_SPLO LT(_LOWER, KC_SPACE)           // tap to get space, hold for switch to LOWER layer
-#define KC_ADJU MO(_ADJUST)                    // hold to go to ADJUST layer
-#define KC_COPY LGUI(KC_C)                     // cmd + c, copy
-#define KC_PASTE LGUI(KC_V)                    // cmd + v, paste
-#define KC_CUT LGUI(KC_X)                      // cmd + x, cut
-#define KC_UNDO LGUI(KC_Z)                     // cmd + z, undo
-#define KC_SALL LGUI(KC_A)                     // cmd + a, select all
-#define KC_REDO LSG(KC_Z)                      // cmd + shift + Z, redo
-#define KC_DUPL LSA(KC_DOWN)                   // shift+alt+down is duplicate line in VSCode
-#define KC_EXPL LSG(KC_E)                      // shift+cmd+e is view explorer file tree in VScode
-#define KC_CLOS LGUI(KC_W)                     // cmd+w close window
-#define KC_TERM LCTL(KC_GRAVE)                 // ctrl+` is Terminal focus or toggle
-#define KC_CYCLE LCTL(KC_TAB)                  // ctrl+tab is cycle editor windows in VSCode
-#define KC_RASE MO(_RAISE)                     // RAISE momentary layer change
-#define KC_LOWR MO(_LOWER)                     // LOWER momentary layer change
-#define KC_BL LCA(KC_J)                        // Rectangle Window manager for mac (WM) Bottom left
-#define KC_BH LCA(KC_DOWN)                     // WM Bottom half
-#define KC_BOR LCA(KC_K)                       // WM Bottom right
-#define KC_LH LCA(KC_LEFT)                     // WM Left half
-#define KC_FS LCA(KC_ENTER)                    // WM Full screen
-#define KC_RH LCA(KC_RIGHT)                    // WM Right half
-#define KC_TL LCA(KC_U)                        // WM Top left
-#define KC_TH LCA(KC_UP)                       // WM Top half
-#define KC_TR LCA(KC_I)                        // WM Top right
-#define KC_RTRM LAG(KC_RIGHT)                  // Focus next terminal in Group VSCode
-#define KC_LTRM LAG(KC_LEFT)                   // Focus previous terminal in Group
-#define KC_MTLD LCAG(KC_LEFT)                  // Rectangle: move to left display
-#define KC_MTRD LCAG(KC_RIGHT)                 // Rectangle: move to right display
-#define KC_HIRES LCAG(KC_F11)                  // SwitchResX: 4K
-#define KC_LORES LCAG(KC_F12)                  // SwitchResX: HD Res (edit prefs to assign shortcuts)
-#define KC_CPRV LCTL(KC_LBRC)                  // ctrl+[ is next file in code collaborator
-#define KC_CNXT LCTL(KC_RBRC)                  // ctrl+] is next file in code collaborator
-#define KC_REVS LCTL(KC_R)                     // ctrl+R is search in terminal history
+#define KC_SPLO LT(_LOWER, KC_SPACE) // tap to get space, hold for switch to LOWER layer
+#define KC_ADJU MO(_ADJUST)          // hold to go to ADJUST layer
+#define KC_COPY LGUI(KC_C)           // cmd + c, copy
+#define KC_PASTE LGUI(KC_V)          // cmd + v, paste
+#define KC_CUT LGUI(KC_X)            // cmd + x, cut
+#define KC_UNDO LGUI(KC_Z)           // cmd + z, undo
+#define KC_SALL LGUI(KC_A)           // cmd + a, select all
+#define KC_REDO LSG(KC_Z)            // cmd + shift + Z, redo
+#define KC_DUPL LSA(KC_DOWN)         // shift+alt+down is duplicate line in VSCode
+#define KC_EXPL LSG(KC_E)            // shift+cmd+e is view explorer file tree in VScode
+#define KC_CLOS LGUI(KC_W)           // cmd+w close window
+#define KC_TERM LCTL(KC_GRAVE)       // ctrl+` is Terminal focus or toggle
+#define KC_CYCLE LCTL(KC_TAB)        // ctrl+tab is cycle editor windows in VSCode
+#define KC_RASE MO(_RAISE)           // RAISE momentary layer change
+#define KC_LOWR MO(_LOWER)           // LOWER momentary layer change
+#define KC_BL LCA(KC_J)              // Rectangle Window manager for mac (WM) Bottom left
+#define KC_BH LCA(KC_DOWN)           // WM Bottom half
+#define KC_BOR LCA(KC_K)             // WM Bottom right
+#define KC_LH LCA(KC_LEFT)           // WM Left half
+#define KC_FS LCA(KC_ENTER)          // WM Full screen
+#define KC_RH LCA(KC_RIGHT)          // WM Right half
+#define KC_TL LCA(KC_U)              // WM Top left
+#define KC_TH LCA(KC_UP)             // WM Top half
+#define KC_TR LCA(KC_I)              // WM Top right
+#define KC_RTRM LAG(KC_RIGHT)        // Focus next terminal in Group VSCode
+#define KC_LTRM LAG(KC_LEFT)         // Focus previous terminal in Group
+#define KC_MTLD LCAG(KC_LEFT)        // Rectangle: move to left display
+#define KC_MTRD LCAG(KC_RIGHT)       // Rectangle: move to right display
+#define KC_HIRES LCAG(KC_F11)        // SwitchResX: 4K
+#define KC_LORES LCAG(KC_F12)        // SwitchResX: HD Res (edit prefs to assign shortcuts)
+#define KC_CPRV LCTL(KC_LBRC)        // ctrl+[ is next file in code collaborator
+#define KC_CNXT LCTL(KC_RBRC)        // ctrl+] is next file in code collaborator
+#define KC_REVS LCTL(KC_R)           // ctrl+R is search in terminal history
 
 #define TAPPING_TERM 200
 
@@ -54,55 +53,52 @@ enum iris_layers {
 #define MAC_VOLUME_DOWN 0x81
 #define MAC_MUTE 0x7f
 
-#define K_VOLUP A(G(MAC_VOLUME_UP))   // any key macro
+#define K_VOLUP A(G(MAC_VOLUME_UP)) // any key macro
 #define K_VOLDN A(G(MAC_VOLUME_DOWN))
 #define K_MUTE A(G(MAC_MUTE))
 
-
 enum custom_keycodes {
-  COLEMAK = SAFE_RANGE,
-  QWERTY,
-  LOWER,
-  RAISE,
-  ADJUST,
-  FIND_G, // VSCode Replace in files Shift+Cmd+H
-  FIND_L, // VSCode Replace in this file Option+Cmd+F
-  SIG,
-  KC_OCPRN,
-  KC_OCBRC,
-  KC_OCCBR,
-  KC_OCDQUO,
-  KC_OCQUOT,
-  LEFT,
-  RIGHT,
-  TOP,
-  BOTTOM,
-  PATH,
-  ALT_TAB,
-  LINUX,
-  COPY,
-  PASTE,
-  SALL,
-  CUT,
-  UNDO,
-  REDO,
-  TERMCLR,
-  BOOTLOG,
-  TYPE_BUF,
-  LOOKUP
+    COLEMAK = SAFE_RANGE,
+    QWERTY,
+    LOWER,
+    RAISE,
+    ADJUST,
+    FIND_G, // VSCode Replace in files Shift+Cmd+H
+    FIND_L, // VSCode Replace in this file Option+Cmd+F
+    SIG,
+    KC_OCPRN,
+    KC_OCBRC,
+    KC_OCCBR,
+    KC_OCDQUO,
+    KC_OCQUOT,
+    LEFT,
+    RIGHT,
+    TOP,
+    BOTTOM,
+    PATH,
+    ALT_TAB,
+    LINUX,
+    COPY,
+    PASTE,
+    SALL,
+    CUT,
+    UNDO,
+    REDO,
+    TERMCLR,
+    BOOTLOG,
+    TYPE_BUF,
+    LOOKUP
 };
-
 
 CircularBuffer cbuff;
 struct lookup {
-    char key[30];
-    char value[128];
+    char           key[30];
+    char           value[128];
     UT_hash_handle hh;
 };
-struct lookup *lookups = NULL;
+struct lookup* lookups = NULL;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-
 /* Colemak DHm
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
     │  ESC   │   1!   │   2@   │   3#   │   4$   │   5%   │                     │   6^   │   7&   │   8*   │   9(   │   0)   │ Bksp   │
@@ -240,20 +236,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t* p_hash_timer);
-void handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyrecord_t *record);
-uint16_t key_to_keycode_for_default_layer(int key);
-void add_lookup_item(char* key, char* value);
+void           handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t* record, uint16_t* p_hash_timer);
+void           handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyrecord_t* record);
+uint16_t       key_to_keycode_for_default_layer(int key);
+void           add_lookup_item(char* key, char* value);
 struct lookup* find_lookup_item(char* key);
 
-
 void keyboard_post_init_user(void) {
-  InitializeBuffer(&cbuff);
-  add_lookup_item("sig", "Best regards,\nFriedrich\n");
+    InitializeBuffer(&cbuff);
+    add_lookup_item("sig", "Best regards,\nFriedrich\n");
 }
 
 void add_lookup_item(char* key, char* value) {
-    struct lookup *lookup_entry;
+    struct lookup* lookup_entry;
     lookup_entry = malloc(sizeof(struct lookup));
     strcpy(lookup_entry->key, key);
     strcpy(lookup_entry->value, value);
@@ -261,38 +256,38 @@ void add_lookup_item(char* key, char* value) {
 }
 
 struct lookup* find_lookup_item(char* key) {
-    struct lookup *lookup_entry;
+    struct lookup* lookup_entry;
     HASH_FIND_STR(lookups, key, lookup_entry);
     return lookup_entry;
 }
 
 uint16_t key_to_keycode_for_default_layer(int key) {
-    bool isColemak = default_layer_state == _COLEMAK;
+    bool     isColemak = default_layer_state == _COLEMAK;
     uint16_t kc;
     switch (key) {
-      case TOP:
-        kc = isColemak ? KC_F : KC_E;
-        break;
-      case RIGHT:
-        kc = isColemak? KC_T : KC_F;
-        break;
-      case BOTTOM:
-        kc = isColemak ? KC_C : KC_C;
-        break;
-      case LEFT:
-        kc = isColemak ? KC_R : KC_S;
-        break;
-      case PATH:
-        kc = isColemak ? KC_LSFT : KC_LSFT;
-        break;
-      default:
-        kc = -1;
+        case TOP:
+            kc = isColemak ? KC_F : KC_E;
+            break;
+        case RIGHT:
+            kc = isColemak ? KC_T : KC_F;
+            break;
+        case BOTTOM:
+            kc = isColemak ? KC_C : KC_C;
+            break;
+        case LEFT:
+            kc = isColemak ? KC_R : KC_S;
+            break;
+        case PATH:
+            kc = isColemak ? KC_LSFT : KC_LSFT;
+            break;
+        default:
+            kc = -1;
     }
     return kc;
 }
 
-void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t* p_hash_timer) {
-    if(record->event.pressed) {
+void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t* record, uint16_t* p_hash_timer) {
+    if (record->event.pressed) {
         *p_hash_timer = timer_read();
     } else {
         if (timer_elapsed(*p_hash_timer) < TAPPING_TERM)
@@ -307,28 +302,28 @@ void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t*
 
 // handle auto-enable of numlock
 void led_set_keymap(uint8_t usb_led) {
-  if (!(usb_led & (1<<USB_LED_NUM_LOCK))) {
-    register_code(KC_NUM_LOCK);
-    unregister_code(KC_NUM_LOCK);
-  }
+    if (!(usb_led & (1 << USB_LED_NUM_LOCK))) {
+        register_code(KC_NUM_LOCK);
+        unregister_code(KC_NUM_LOCK);
+    }
 }
 
 // Enable the ctrl+backspace (KC_BSPC) to function as delete forward (KC_DEL)
 // also enables ctrl+alt+del on windows via ctrl+alt+backspace
 uint8_t mod_state;
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
     static uint16_t my_hash_timer;
-    static bool isLinux = false;
-    static bool isLookupMode = false;
-    static char buffer[BUFFER_SIZE];
-    struct lookup* lookup_entry;
+    static bool     isLinux      = false;
+    static bool     isLookupMode = false;
+    static char     buffer[BUFFER_SIZE];
+    struct lookup*  lookup_entry;
     mod_state = get_mods();
     switch (keycode) {
         case LOOKUP: {
             if (record->event.pressed) {
-              isLookupMode = true;
-              InitializeBuffer(&cbuff);
-              return false;
+                isLookupMode = true;
+                InitializeBuffer(&cbuff);
+                return false;
             }
         }
         case BOOTLOG:
@@ -357,7 +352,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 } else {
                     tap_code16(LGUI(KC_V));
                 }
-            return false;
+                return false;
             }
         case CUT:
             if (record->event.pressed) {
@@ -427,7 +422,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case PATH: {
             static bool path_registered;
             if (record->event.pressed) {
-              tap_code16(LGUI(LALT(KC_C)));
+                tap_code16(LGUI(LALT(KC_C)));
                 SEND_STRING(SS_DELAY(500));
                 tap_code16(LCTL(KC_GRAVE));
                 tap_code16(LGUI(KC_V));
@@ -451,13 +446,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     clear_mods();
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("-"))));
                     set_mods(mod_state);
-                }
-                else if (mod_state & MOD_MASK_CTRL) {
+                } else if (mod_state & MOD_MASK_CTRL) {
                     clear_mods();
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("4"))));
                     set_mods(mod_state);
-                }
-                else
+                } else
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("8"))));
                 left_registered = true;
                 return false;
@@ -477,13 +470,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     clear_mods();
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("="))));
                     set_mods(mod_state);
-                }
-                else if (mod_state & MOD_MASK_CTRL) {
+                } else if (mod_state & MOD_MASK_CTRL) {
                     clear_mods();
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("1"))));
                     set_mods(mod_state);
-                }
-                else
+                } else
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("7"))));
                 right_registered = true;
                 return false;
@@ -503,13 +494,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     clear_mods();
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("["))));
                     set_mods(mod_state);
-                }
-                else if (mod_state & MOD_MASK_CTRL) {
+                } else if (mod_state & MOD_MASK_CTRL) {
                     clear_mods();
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("3"))));
                     set_mods(mod_state);
-                }
-                else
+                } else
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("0"))));
                 top_registered = true;
                 return false;
@@ -529,13 +518,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     clear_mods();
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("]"))));
                     set_mods(mod_state);
-                }
-                else if (mod_state & MOD_MASK_CTRL) {
+                } else if (mod_state & MOD_MASK_CTRL) {
                     clear_mods();
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("2"))));
                     set_mods(mod_state);
-                }
-                else
+                } else
                     SEND_STRING(SS_LGUI(SS_LCTL(SS_LALT("9"))));
                 bottom_registered = true;
                 return false;
@@ -591,56 +578,55 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
         }
         case ALT_TAB: {
-          if (record->event.pressed) {
-            set_mods(MOD_MASK_GUI);
-            tap_code16(KC_TAB);
-          } else {
-            clear_mods();
-          }
-          return false;
+            if (record->event.pressed) {
+                set_mods(MOD_MASK_GUI);
+                tap_code16(KC_TAB);
+            } else {
+                clear_mods();
+            }
+            return false;
         }
         case TYPE_BUF: {
-          if (record->event.pressed) {
-            TypeBuffer(&cbuff);
-          }
-          return false;
+            if (record->event.pressed) {
+                TypeBuffer(&cbuff);
+            }
+            return false;
         }
         default: {
-            if (!record->event.pressed)
-                return true;
+            if (record->event.pressed) {
+                // get out of lookup mode
+                if (keycode == KC_ESC && isLookupMode) {
+                    isLookupMode = false;
+                    return false;
+                }
 
-            // get out of lookup mode
-            if (keycode == KC_ESC && isLookupMode) {
-                isLookupMode = false;
-                return false;
-            }
+                // if not enter, just remember the key, anc do not display
+                if (isLookupMode && keycode != KC_ENTER) {
+                    AddKeystroke(&cbuff, keycode);
+                    return false;
+                }
 
-            // if not enter, just remember the key, anc do not display
-            if (keycode != KC_ENTER) {
-                AddKeystroke(&cbuff, keycode);
-                return false;
-            }
+                // if enter, lookup the key
+                if (isLookupMode && keycode == KC_ENTER) {
+                    GetBuffer(&cbuff, buffer, BUFFER_SIZE);
+                    lookup_entry = find_lookup_item(buffer);
 
-            // if enter, lookup the key
-            GetBuffer(&cbuff, buffer, BUFFER_SIZE);
-            lookup_entry = find_lookup_item(buffer);
-
-            // handle the error if the key was not found
-            if (lookup_entry == NULL) {
-                SEND_STRING(":-(");
-                SEND_STRING(SS_DELAY(500));
-                for (int i = 0; i < 3; i++) {
-                    tap_code16(KC_BSPC);
+                    // handle the error if the key was not found
+                    if (lookup_entry == NULL) {
+                        SEND_STRING(":-(");
+                        SEND_STRING(SS_DELAY(500));
+                        for (int i = 0; i < 3; i++) {
+                            tap_code16(KC_BSPC);
+                        }
+                    } else {
+                        SEND_STRING(lookup_entry->value);
+                    }
+                    isLookupMode = false;
+                    return false;
                 }
             }
-            else {
-                SEND_STRING(lookup_entry->value);
-            }
-            isLookupMode = false;
-            return false;
         }
 
     } // end switch
     return true;
 };
-
