@@ -1,6 +1,9 @@
 #include QMK_KEYBOARD_H
 #include "secrets.h"
 #include "keymap_combo.h"
+#include "uthash.h"
+#include "circular_buffer.c"
+
 
 enum iris_layers {
   _COLEMAK,
@@ -51,7 +54,6 @@ enum iris_layers {
 #define MAC_VOLUME_DOWN 0x81
 #define MAC_MUTE 0x7f
 
-
 #define K_VOLUP A(G(MAC_VOLUME_UP))   // any key macro
 #define K_VOLDN A(G(MAC_VOLUME_DOWN))
 #define K_MUTE A(G(MAC_MUTE))
@@ -84,9 +86,20 @@ enum custom_keycodes {
   CUT,
   UNDO,
   REDO,
-  TERMCLR
+  TERMCLR,
+  BOOTLOG,
+  TYPE_BUF,
+  LOOKUP
 };
 
+
+CircularBuffer cbuff;
+struct lookup {
+    char key[30];
+    char value[128];
+    UT_hash_handle hh;
+};
+struct lookup *lookups = NULL;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -152,7 +165,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │   "    │   _    │   (    │   =    │    )   │   -    │                     │ Home   │   ←    │   ↓    │   →    │  End   │ PgUp   │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │ Shift  │   |    │   [    │   &    │    ]   │   /?   │   \    │   │        │ Switch │ SelAll │  Cut   │  Undo  │  Redo  │ PgDown │
+    │ Lookup │   |    │   [    │   &    │    ]   │   /?   │   \    │   │        │ Switch │ SelAll │  Cut   │  Undo  │  Redo  │ PgDown │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
     Ctrl+tab switches editors      │        │        │        │            │        │        │        │
                                    └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -165,7 +178,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_OCDQUO,KC_UNDS,KC_OCPRN, KC_EQL,  KC_RPRN, KC_MINS,                        KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT, KC_END, KC_PGUP,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐     ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_LSFT, KC_PIPE, KC_OCBRC,KC_AMPR, KC_RBRC, KC_SLASH,KC_BACKSLASH,  _______, ALT_TAB, SALL,    CUT,     UNDO,     REDO,   KC_PGDN,
+     LOOKUP,  KC_PIPE, KC_OCBRC,KC_AMPR, KC_RBRC, KC_SLASH,KC_BACKSLASH,  _______, ALT_TAB, SALL,    CUT,     UNDO,     REDO,   KC_PGDN,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘     └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                _______, _______, _______
   //                               └────────┴────────┴────────┘              └────────┴────────┴────────┘
@@ -205,9 +218,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │COLEMAK │        │MouseL  │  Ed ↑  │MouseR  │        │                     │MissCtl │WTopLeft│WTopHalf│WTopHalf│        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │IsLinux │        │ Ed ←   │MouseDwn│  Ed →  │        │                     │        │WLftHalf│ WMaxim │WRtHalf │ mouse1 │ mouse2 │
+    │IsLinux │TYPE_BUF│ Ed ←   │MouseDwn│  Ed →  │        │                     │        │WLftHalf│ WMaxim │WRtHalf │ mouse1 │ mouse2 │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │ Path   │        │        │  Ed ↓  │        │        │  Menu  │   │        │        │WBotLeft│WBotHalf│WBotRigt│ Cprev  │ Cnext  │
+    │ Path   │BOOTLOG │        │  Ed ↓  │        │        │  Menu  │   │        │        │WBotLeft│WBotHalf│WBotRigt│ Cprev  │ Cnext  │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │            │        │        │        │
                                    └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -218,9 +231,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      COLEMAK, _______, KC_MS_LEFT,TOP,   KC_MS_RIGHT, _______,                   KC_MCTL,  KC_TL,   KC_TH,   KC_TR,  _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-     LINUX,   _______, LEFT,    KC_MS_DOWN,RIGHT, _______,                       _______, KC_LH,   KC_FS,   KC_RH,   KC_BTN1, KC_BTN2,
+     LINUX,   TYPE_BUF, LEFT,    KC_MS_DOWN,RIGHT, _______,                       _______, KC_LH,   KC_FS,   KC_RH,   KC_BTN1, KC_BTN2,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     PATH,    _______, _______,  BOTTOM, _______, KC_MENU, _______,     _______, _______, KC_BL,   KC_BH,   KC_BOR,  KC_CPRV, KC_CNXT,
+     PATH,    BOOTLOG, _______, BOTTOM,  _______, KC_MENU, _______,     _______, _______, KC_BL,   KC_BH,   KC_BOR,  KC_CPRV, KC_CNXT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,              _______, _______, _______
   //                               └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -230,6 +243,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t *record, uint16_t* p_hash_timer);
 void handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyrecord_t *record);
 uint16_t key_to_keycode_for_default_layer(int key);
+void add_lookup_item(char* key, char* value);
+struct lookup* find_lookup_item(char* key);
+
+
+void keyboard_post_init_user(void) {
+  InitializeBuffer(&cbuff);
+  add_lookup_item("sig", "Best regards,\nFriedrich\n");
+}
+
+void add_lookup_item(char* key, char* value) {
+    struct lookup *lookup_entry;
+    lookup_entry = malloc(sizeof(struct lookup));
+    strcpy(lookup_entry->key, key);
+    strcpy(lookup_entry->value, value);
+    HASH_ADD_STR(lookups, key, lookup_entry);
+}
+
+struct lookup* find_lookup_item(char* key) {
+    struct lookup *lookup_entry;
+    HASH_FIND_STR(lookups, key, lookup_entry);
+    return lookup_entry;
+}
 
 uint16_t key_to_keycode_for_default_layer(int key) {
     bool isColemak = default_layer_state == _COLEMAK;
@@ -284,8 +319,23 @@ uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint16_t my_hash_timer;
     static bool isLinux = false;
+    static bool isLookupMode = false;
+    static char buffer[BUFFER_SIZE];
+    struct lookup* lookup_entry;
     mod_state = get_mods();
     switch (keycode) {
+        case LOOKUP: {
+            if (record->event.pressed) {
+              isLookupMode = true;
+              InitializeBuffer(&cbuff);
+              return false;
+            }
+        }
+        case BOOTLOG:
+            if (record->event.pressed) {
+                send_string_with_delay(DESKTOP_LOGIN, 100);
+            }
+            return false;
         case LINUX:
             if (record->event.pressed) {
                 isLinux = !isLinux;
@@ -540,15 +590,57 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
             }
         }
-        case ALT_TAB:
+        case ALT_TAB: {
           if (record->event.pressed) {
             set_mods(MOD_MASK_GUI);
             tap_code16(KC_TAB);
           } else {
             clear_mods();
           }
-          break;
-    }
+          return false;
+        }
+        case TYPE_BUF: {
+          if (record->event.pressed) {
+            TypeBuffer(&cbuff);
+          }
+          return false;
+        }
+        default: {
+            if (!record->event.pressed)
+                return true;
+
+            // get out of lookup mode
+            if (keycode == KC_ESC && isLookupMode) {
+                isLookupMode = false;
+                return false;
+            }
+
+            // if not enter, just remember the key, anc do not display
+            if (keycode != KC_ENTER) {
+                AddKeystroke(&cbuff, keycode);
+                return false;
+            }
+
+            // if enter, lookup the key
+            GetBuffer(&cbuff, buffer, BUFFER_SIZE);
+            lookup_entry = find_lookup_item(buffer);
+
+            // handle the error if the key was not found
+            if (lookup_entry == NULL) {
+                SEND_STRING(":-(");
+                SEND_STRING(SS_DELAY(500));
+                for (int i = 0; i < 3; i++) {
+                    tap_code16(KC_BSPC);
+                }
+            }
+            else {
+                SEND_STRING(lookup_entry->value);
+            }
+            isLookupMode = false;
+            return false;
+        }
+
+    } // end switch
     return true;
 };
 
