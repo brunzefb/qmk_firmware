@@ -3,6 +3,7 @@
 #include "keymap_combo.h"
 #include "uthash.h"
 #include "circular_buffer.c"
+#include <stdio.h>
 
 enum iris_layers {
     _COLEMAK,
@@ -90,13 +91,7 @@ enum custom_keycodes {
     LOOKUP
 };
 
-CircularBuffer cbuff;
-struct lookup {
-    char           key[30];
-    char           value[128];
-    UT_hash_handle hh;
-};
-struct lookup* lookups = NULL;
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Colemak DHm
@@ -236,23 +231,54 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+CircularBuffer cbuff;
+struct lookup {
+    char           key[30];
+    char           value[256];
+    UT_hash_handle hh;
+};
+struct lookup* lookups = NULL;
+
 void           handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t* record, uint16_t* p_hash_timer);
 void           handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyrecord_t* record);
 uint16_t       key_to_keycode_for_default_layer(int key);
 void           add_lookup_item(char* key, char* value);
 struct lookup* find_lookup_item(char* key);
+void           show_all_keys(void);
+
 
 void keyboard_post_init_user(void) {
     InitializeBuffer(&cbuff);
-    add_lookup_item("sig", "Best regards,\nFriedrich\n");
+    add_lookup_item("sig", REGARDS);
+    add_lookup_item("smail", EMAIL);
+    add_lookup_item("gmail", GMAIL);
+    add_lookup_item("spw", NETADDS_PW);
+    add_lookup_item("supw", NETADDS_EMAIL);
+    add_lookup_item("ssupw", NETADDS_USER);
+    add_lookup_item("napc", COLLABORATOR);
+    add_lookup_item("conf", CONFLUENCE);
+    add_lookup_item("jira", JIRA);
+    add_lookup_item("jenk", JENKINS);
 }
 
 void add_lookup_item(char* key, char* value) {
     struct lookup* lookup_entry;
     lookup_entry = malloc(sizeof(struct lookup));
-    strcpy(lookup_entry->key, key);
-    strcpy(lookup_entry->value, value);
+    strncpy(lookup_entry->key, key, sizeof(lookup_entry->key) - 1);
+    lookup_entry->key[sizeof(lookup_entry->key) - 1] = '\0';
+    strncpy(lookup_entry->value, value, sizeof(lookup_entry->value) - 1);
+    lookup_entry->value[sizeof(lookup_entry->value) - 1] = '\0';
     HASH_ADD_STR(lookups, key, lookup_entry);
+}
+
+void show_all_keys(void) {
+    struct lookup *s;
+    char buffer[256];
+    SEND_STRING("Keys:\n");
+    for (s = lookups; s != NULL; s = s->hh.next) {
+        snprintf(buffer, sizeof(buffer), "Key %s=%s\n", s->key, s->value);
+        SEND_STRING(buffer);
+    }
 }
 
 struct lookup* find_lookup_item(char* key) {
@@ -609,6 +635,11 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
                 // if enter, lookup the key
                 if (isLookupMode && keycode == KC_ENTER) {
                     GetBuffer(&cbuff, buffer, BUFFER_SIZE);
+                    if (strncmp(buffer, "ls", 2) == 0) {
+                        show_all_keys();
+                        isLookupMode = false;
+                        return false;
+                    }
                     lookup_entry = find_lookup_item(buffer);
 
                     // handle the error if the key was not found
