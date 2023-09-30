@@ -4,6 +4,8 @@
 #include "uthash.h"
 #include "circular_buffer.c"
 #include <stdio.h>
+#include <string.h>
+#include "unicode_support.h"
 
 enum iris_layers {
     _COLEMAK,
@@ -29,7 +31,7 @@ enum iris_layers {
 #define KC_CYCLE LCTL(KC_TAB)        // ctrl+tab is cycle editor windows in VSCode
 #define KC_RASE MO(_RAISE)           // RAISE momentary layer change
 #define KC_LOWR MO(_LOWER)           // LOWER momentary layer change
-#define KC_BL LCA(KC_J)              // Rectangle Window manager for mac (WM) Bottom left
+#define KC_BL LCA(KC_J)              // Rectangle Window manageBUFFER_SIZEr for mac (WM) Bottom left
 #define KC_BH LCA(KC_DOWN)           // WM Bottom half
 #define KC_BOR LCA(KC_K)             // WM Bottom right
 #define KC_LH LCA(KC_LEFT)           // WM Left half
@@ -58,6 +60,7 @@ enum iris_layers {
 #define K_VOLUP A(G(MAC_VOLUME_UP)) // any key macro
 #define K_VOLDN A(G(MAC_VOLUME_DOWN))
 #define K_MUTE A(G(MAC_MUTE))
+#define MAX_STRING_LENGTH 256
 
 enum custom_keycodes {
     COLEMAK = SAFE_RANGE,
@@ -246,15 +249,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
   [_UTIL] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_F1,   _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
+     KC_F1,   CW_TOGG, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, _______, _______,                       _______, _______, _______,_______,  _______, _______,
+     _______, _______, _______, U_SS,     _______, _______,                       _______, U_NTIL,  _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______,  _______, _______, _______,    _______, _______, _______, _______, _______, _______, _______,
+     _______, _______, _______, U_CCED,  _______, _______, _______,     _______, _______, _______, _______, _______,  U_IQUE, _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                    _______, _______, _______,              _______, _______, _______
+                                    _______, _______, _______,              _______,  _______, _______
   //                               └────────┴────────┴────────┘            └────────┴────────┴────────┘
   )
 };
@@ -262,51 +265,103 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 CircularBuffer cbuff;
 struct lookup {
     char           key[30];
-    char           value[256];
+    char           value[MAX_STRING_LENGTH];
     UT_hash_handle hh;
 };
-struct lookup* lookups = NULL;
 
+static bool isLinux = false;
+struct lookup* lookups = NULL;
+static const char delimiter[] = "<!!>";
+void           replaceChar(char *str, char search, char replacement);
+void           concatWithMax(char *dest, const char *src, int maxLength);
+void           extractStrings(const char *source, size_t sourceLength,
+                    const char *delimiter, size_t delimiterLength,
+                    char *command, size_t commandMaxLength,
+                    char *description, size_t descriptionMaxLength);
 void           handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t* record, uint16_t* p_hash_timer);
 void           handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyrecord_t* record);
 uint16_t       key_to_keycode_for_default_layer(int key);
-void           add_lookup_item(char* key, char* value);
+void           add_lookup_item(char* key, char* value, char* description);
 struct lookup* find_lookup_item(char* key);
 void           show_all_keys(void);
 
 
 void keyboard_post_init_user(void) {
     InitializeBuffer(&cbuff);
-    add_lookup_item("sig", REGARDS);
-    add_lookup_item("smail", EMAIL);
-    add_lookup_item("gmail", GMAIL);
-    add_lookup_item("spw", NETADDS_PW);
-    add_lookup_item("supw", NETADDS_EMAIL);
-    add_lookup_item("ssupw", NETADDS_USER);
-    add_lookup_item("napc", COLLABORATOR);
-    add_lookup_item("conf", CONFLUENCE);
-    add_lookup_item("jira", JIRA);
-    add_lookup_item("jenk", JENKINS);
+    add_lookup_item("gmail", LAUNCH_CHROME "gmail.com", "Gmail Web");
+    add_lookup_item("pgmail", "brunzefb@gmail.com", "Gmail U/P");
+
 }
 
-void add_lookup_item(char* key, char* value) {
+
+void add_lookup_item(char* key, char* value, char* description) {
     struct lookup* lookup_entry;
     lookup_entry = malloc(sizeof(struct lookup));
+    memset(lookup_entry, 0, sizeof(struct lookup));
+    if (isLinux) {
+        replaceChar(key, 0xe3, 0xe0); // replace cmd with ctrl
+    }
     strncpy(lookup_entry->key, key, sizeof(lookup_entry->key) - 1);
-    lookup_entry->key[sizeof(lookup_entry->key) - 1] = '\0';
     strncpy(lookup_entry->value, value, sizeof(lookup_entry->value) - 1);
-    lookup_entry->value[sizeof(lookup_entry->value) - 1] = '\0';
-    HASH_ADD_STR(lookups, key, lookup_entry);
+    concatWithMax(lookup_entry->value, delimiter, MAX_STRING_LENGTH - 1);
+    concatWithMax(lookup_entry->value, description, MAX_STRING_LENGTH - 1);
 }
 
 void show_all_keys(void) {
     struct lookup *s;
-    char buffer[256];
+    char buffer[MAX_STRING_LENGTH];
+    char command[MAX_STRING_LENGTH];
+    char description[MAX_STRING_LENGTH];
     SEND_STRING("Keys:\n");
+
     for (s = lookups; s != NULL; s = s->hh.next) {
-        snprintf(buffer, sizeof(buffer), "Key %s=%s\n", s->key, s->value);
+      extractStrings(s->value, strlen(s->value),
+                      delimiter, strlen(delimiter),
+                      command, MAX_STRING_LENGTH,
+                      description, MAX_STRING_LENGTH);
+        snprintf(buffer, sizeof(buffer), "%s -- %s\n", s->key, description);
         SEND_STRING(buffer);
     }
+}
+
+void replaceChar(char *str, char search, char replacement) {
+    for (int i = 0; str[i] != '\0' && i < MAX_STRING_LENGTH - 1 ; i++) {
+        if (str[i] == search) {
+            str[i] = replacement;
+        }
+    }
+}
+
+void extractStrings(const char *source, size_t sourceLength,
+                    const char *delimiter, size_t delimiterLength,
+                    char *command, size_t commandMaxLength,
+                    char *description, size_t descriptionMaxLength) {
+    const char *delimiterPtr = strstr(source, delimiter);
+
+    memset(command, 0, commandMaxLength);
+    memset(description, 0, descriptionMaxLength);
+
+    if (delimiterPtr != NULL) {
+        size_t commandLength = delimiterPtr - source;
+        size_t copyLength = (commandLength < commandMaxLength - 1) ? commandLength : commandMaxLength - 1;
+        strncpy(command, source, copyLength);
+        size_t remainingDescriptionLength = sourceLength - commandLength - delimiterLength;
+        copyLength = (remainingDescriptionLength < descriptionMaxLength - 1) ?
+                                                remainingDescriptionLength : descriptionMaxLength - 1;
+        strncpy(description, delimiterPtr + delimiterLength, copyLength);
+    }
+}
+
+void concatWithMax(char *dest, const char *src, int maxLength) {
+    int currentLength = strlen(dest);
+
+    int remainingSpace = maxLength - currentLength;
+
+    if (remainingSpace <= 0) {
+        return;
+    }
+
+    strncat(dest, src, remainingSpace);
 }
 
 struct lookup* find_lookup_item(char* key) {
@@ -367,7 +422,7 @@ void led_set_keymap(uint8_t usb_led) {
 uint8_t mod_state;
 bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
     static uint16_t my_hash_timer;
-    static bool     isLinux      = false;
+
     static bool     isLookupMode = false;
     static char     buffer[BUFFER_SIZE];
     struct lookup*  lookup_entry;
@@ -673,12 +728,18 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
                     // handle the error if the key was not found
                     if (lookup_entry == NULL) {
                         SEND_STRING(":-(");
-                        SEND_STRING(SS_DELAY(500));
+                        SEND_STRING(SS_DELAY(800));
                         for (int i = 0; i < 3; i++) {
                             tap_code16(KC_BSPC);
                         }
                     } else {
-                        SEND_STRING(lookup_entry->value);
+                        char command[MAX_STRING_LENGTH];
+                        char description[MAX_STRING_LENGTH];
+                        extractStrings(lookup_entry->value, strlen(lookup_entry->value),
+                                       delimiter, strlen(delimiter),
+                                       command, MAX_STRING_LENGTH,
+                                       description, MAX_STRING_LENGTH);
+                        SEND_STRING(command);
                     }
                     isLookupMode = false;
                     return false;
