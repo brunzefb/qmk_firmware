@@ -264,62 +264,69 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 CircularBuffer cbuff;
 struct lookup {
-    char           key[30];
-    char           value[MAX_STRING_LENGTH];
+    char  key[30];
+    char  value[255];
+    char  description[80];
     UT_hash_handle hh;
 };
 
 static bool isLinux = false;
-struct lookup* lookups = NULL;
+struct lookup* lookup_table = NULL;
 static const char delimiter[] = "<!!>";
 void           replaceChar(char *str, char search, char replacement);
-void           concatWithMax(char *dest, const char *src, int maxLength);
-void           extractStrings(const char *source, size_t sourceLength,
-                    const char *delimiter, size_t delimiterLength,
-                    char *command, size_t commandMaxLength,
-                    char *description, size_t descriptionMaxLength);
 void           handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t* record, uint16_t* p_hash_timer);
 void           handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyrecord_t* record);
 uint16_t       key_to_keycode_for_default_layer(int key);
 void           add_lookup_item(char* key, char* value, char* description);
 struct lookup* find_lookup_item(char* key);
 void           show_all_keys(void);
+void           replace_all(void);
 
 
 void keyboard_post_init_user(void) {
     InitializeBuffer(&cbuff);
-    add_lookup_item("gmail", LAUNCH_CHROME "gmail.com", "Gmail Web");
-    add_lookup_item("pgmail", "brunzefb@gmail.com", "Gmail U/P");
+    add_lookup_item("lgmail", LAUNCH_CHROME "gmail.com\n", "Gmail web");
+    add_lookup_item("gmail", "brunzefb@gmail.com", "Gmail address");
+    add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
 
 }
 
+void replace_all() {
+  struct lookup *s;
+
+  for (s = lookup_table; s != NULL; s = s->hh.next) {
+     if(isLinux)
+       replaceChar(s->value, 0xe3, 0xe0); // replace cmd with ctrl
+     else
+       replaceChar(s->value, 0xe0, 0xe3); // replace ctrl with cmd
+  }
+}
 
 void add_lookup_item(char* key, char* value, char* description) {
     struct lookup* lookup_entry;
+    lookup_entry = find_lookup_item(key);
     lookup_entry = malloc(sizeof(struct lookup));
     memset(lookup_entry, 0, sizeof(struct lookup));
-    if (isLinux) {
-        replaceChar(key, 0xe3, 0xe0); // replace cmd with ctrl
-    }
-    strncpy(lookup_entry->key, key, sizeof(lookup_entry->key) - 1);
-    strncpy(lookup_entry->value, value, sizeof(lookup_entry->value) - 1);
-    concatWithMax(lookup_entry->value, delimiter, MAX_STRING_LENGTH - 1);
-    concatWithMax(lookup_entry->value, description, MAX_STRING_LENGTH - 1);
+    strncpy(lookup_entry->key, key, 30);
+    strncpy(lookup_entry->value, value, 255);
+    strncpy(lookup_entry->description, description, 80);
+    HASH_ADD_KEYPTR(hh, lookup_table, lookup_entry->key, strlen(lookup_entry->key), lookup_entry);
 }
 
 void show_all_keys(void) {
     struct lookup *s;
-    char buffer[MAX_STRING_LENGTH];
-    char command[MAX_STRING_LENGTH];
-    char description[MAX_STRING_LENGTH];
-    SEND_STRING("Keys:\n");
+    char buffer[256];
+    int max_key_length = 0;
 
-    for (s = lookups; s != NULL; s = s->hh.next) {
-      extractStrings(s->value, strlen(s->value),
-                      delimiter, strlen(delimiter),
-                      command, MAX_STRING_LENGTH,
-                      description, MAX_STRING_LENGTH);
-        snprintf(buffer, sizeof(buffer), "%s -- %s\n", s->key, description);
+    SEND_STRING("Keys:\n");
+    for (s = lookup_table; s != NULL; s = s->hh.next) {
+      int key_length = strlen(s->key);
+      if (key_length > max_key_length)
+        max_key_length = key_length;
+    }
+
+    for (s = lookup_table; s != NULL; s = s->hh.next) {
+        snprintf(buffer, sizeof(buffer), "%-*s - %s\n", max_key_length, s->key, s->description);
         SEND_STRING(buffer);
     }
 }
@@ -332,41 +339,9 @@ void replaceChar(char *str, char search, char replacement) {
     }
 }
 
-void extractStrings(const char *source, size_t sourceLength,
-                    const char *delimiter, size_t delimiterLength,
-                    char *command, size_t commandMaxLength,
-                    char *description, size_t descriptionMaxLength) {
-    const char *delimiterPtr = strstr(source, delimiter);
-
-    memset(command, 0, commandMaxLength);
-    memset(description, 0, descriptionMaxLength);
-
-    if (delimiterPtr != NULL) {
-        size_t commandLength = delimiterPtr - source;
-        size_t copyLength = (commandLength < commandMaxLength - 1) ? commandLength : commandMaxLength - 1;
-        strncpy(command, source, copyLength);
-        size_t remainingDescriptionLength = sourceLength - commandLength - delimiterLength;
-        copyLength = (remainingDescriptionLength < descriptionMaxLength - 1) ?
-                                                remainingDescriptionLength : descriptionMaxLength - 1;
-        strncpy(description, delimiterPtr + delimiterLength, copyLength);
-    }
-}
-
-void concatWithMax(char *dest, const char *src, int maxLength) {
-    int currentLength = strlen(dest);
-
-    int remainingSpace = maxLength - currentLength;
-
-    if (remainingSpace <= 0) {
-        return;
-    }
-
-    strncat(dest, src, remainingSpace);
-}
-
 struct lookup* find_lookup_item(char* key) {
     struct lookup* lookup_entry;
-    HASH_FIND_STR(lookups, key, lookup_entry);
+    HASH_FIND_STR(lookup_table, key, lookup_entry);
     return lookup_entry;
 }
 
@@ -443,6 +418,7 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
         case LINUX:
             if (record->event.pressed) {
                 isLinux = !isLinux;
+                replace_all();
             }
             return false;
         case COPY:
@@ -733,13 +709,7 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
                             tap_code16(KC_BSPC);
                         }
                     } else {
-                        char command[MAX_STRING_LENGTH];
-                        char description[MAX_STRING_LENGTH];
-                        extractStrings(lookup_entry->value, strlen(lookup_entry->value),
-                                       delimiter, strlen(delimiter),
-                                       command, MAX_STRING_LENGTH,
-                                       description, MAX_STRING_LENGTH);
-                        SEND_STRING(command);
+                        SEND_STRING(lookup_entry->value);
                     }
                     isLookupMode = false;
                     return false;
