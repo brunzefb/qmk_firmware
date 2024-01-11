@@ -112,7 +112,7 @@
 #define US_ARNG ALGR(US_W)    // Å
 #define US_EACU ALGR(US_E)    // É
 #define US_REGD ALGR(US_R)    // ®
-#define US_THRN ALGR(US_T)    // Þ
+#define US_THRN ALGR(US_T)    // Þn
 #define US_UDIA ALGR(US_Y)    // Ü
 #define US_UACU ALGR(US_U)    // Ú
 #define US_IACU ALGR(US_I)    // Í
