@@ -280,15 +280,35 @@ void           handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyreco
 uint16_t       key_to_keycode_for_default_layer(int key);
 void           add_lookup_item(char* key, char* value, char* description);
 struct lookup* find_lookup_item(char* key);
+struct lookup* find_lookup_item_partial(char* key);
 void           show_all_keys(void);
 void           replace_all(void);
 
 
 void keyboard_post_init_user(void) {
     InitializeBuffer(&cbuff);
-    add_lookup_item("lgmail", LAUNCH_CHROME "gmail.com\n", "Gmail web");
+    add_lookup_item("wgmail", LAUNCH_CHROME "gmail.com\n", "Gmail web");
+    add_lookup_item("wbitbucket", LAUNCH_CHROME "https://bitbucket.netadds.net/login?next=\n", "SCIEX Bitbucket");
+    add_lookup_item("wconfluence", LAUNCH_CHROME "https://confluence.netadds.net/login.action?os_destination=%2F\n", "Confluence");
+    add_lookup_item("wcollaborator", LAUNCH_CHROME "http://codecollaborator:8080/ui\n", "Collaborator");
+    add_lookup_item("wetime", ETIME "http://amcon-etimeweb1.netadds.net/etmsystems/login.aspx\n", "ETime with Firefox");
+    add_lookup_item("wworkday", LAUNCH_CHROME "https://www.myworkday.com/danaher/d/home.htmld\n", "Workday");
+    add_lookup_item("wsmartsolve", LAUNCH_CHROME "https://sciex.pilgrimasp.com/prod/\n", "Smartsolve");
+    add_lookup_item("wjenkins", LAUNCH_CHROME "https://jenkins.sciex.net/login?next=\n", "Jenkins");
+    add_lookup_item("wsonar", LAUNCH_CHROME "https://sonar.sciex.net/sessions/new?return_to=%2F\n", "Workday");
+    add_lookup_item("wnexus", LAUNCH_CHROME "https://nexus.sciex.net\n", "Nexus");
+    add_lookup_item("wteamcity", LAUNCH_CHROME "https://teamcity.netadds.net/login.html\n", "Team City");
+    add_lookup_item("wawsqa", LAUNCH_CHROME "https://inferno-sandbox.signin.aws.amazon.com/console\n", "AWS qa web");
+    add_lookup_item("wawsnca", LAUNCH_CHROME "https://sciex-cloud-devops.signin.aws.amazon.com/console\n", "AWS nca web");
+    add_lookup_item("wawsit", LAUNCH_CHROME "https://812928068820.signin.aws.amazon.com/console\n", "AWS IT web");
+    add_lookup_item("wawsbs", LAUNCH_CHROME "https://brightspark.signin.aws.amazon.com/console\n", "AWS brightspark web");
+    add_lookup_item("wawsprod", LAUNCH_CHROME "https://prod-oneomics.signin.aws.amazon.com/console\n", "AWS oneomics prod web");
+    add_lookup_item("wawscdev", LAUNCH_CHROME "https://sciex-cloud-dev.signin.aws.amazon.com/console\n", "AWS cloud dev web");
+    add_lookup_item("wawsres", LAUNCH_CHROME "https://research-sciex.signin.aws.amazon.com/console\n", "AWS research web");
     add_lookup_item("gmail", "brunzefb@gmail.com", "Gmail address");
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
+    add_lookup_item("me", "Friedrich Brunzema", "Friedrich Brunzema");
+    add_lookup_item("petime", "brunzefb\tSS_DELAY(100)xaris5\t\t ", "ETime login");
 
 }
 
@@ -344,6 +364,18 @@ struct lookup* find_lookup_item(char* key) {
     struct lookup* lookup_entry;
     HASH_FIND_STR(lookup_table, key, lookup_entry);
     return lookup_entry;
+}
+
+
+struct lookup* find_lookup_item_partial(char* key) {
+    struct lookup *lookup_entry;
+
+    for (lookup_entry = lookup_table; lookup_entry != NULL; lookup_entry = lookup_entry->hh.next) {
+        if (strstr(lookup_entry->key, key) != NULL) {
+            return lookup_entry; // Partial match found, return the item
+        }
+    }
+    return NULL;
 }
 
 uint16_t key_to_keycode_for_default_layer(int key) {
@@ -700,7 +732,7 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
                         isLookupMode = false;
                         return false;
                     }
-                    lookup_entry = find_lookup_item(buffer);
+                    lookup_entry = find_lookup_item_partial(buffer);
 
                     // handle the error if the key was not found
                     if (lookup_entry == NULL) {
