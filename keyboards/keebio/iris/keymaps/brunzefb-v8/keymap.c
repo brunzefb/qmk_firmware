@@ -280,12 +280,8 @@ void           handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyreco
 uint16_t       key_to_keycode_for_default_layer(int key);
 void           add_lookup_item(char* key, char* value, char* description);
 struct lookup* find_lookup_item(char* key);
-<<<<<<< HEAD
-void           show_all_keys(char * buffer);
-=======
 struct lookup* find_lookup_item_partial(char* key);
-void           show_all_keys(void);
->>>>>>> 93d8f368f93598d78790259b2a509369310828d0
+void           show_all_keys(char*);
 void           replace_all(void);
 
 
