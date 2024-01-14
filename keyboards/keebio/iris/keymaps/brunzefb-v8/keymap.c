@@ -279,16 +279,19 @@ void           handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyreco
 uint16_t       key_to_keycode_for_default_layer(int key);
 void           add_lookup_item(char* key, char* value, char* description);
 struct lookup* find_lookup_item(char* key);
-void           show_all_keys(void);
+void           show_all_keys(char * buffer);
 void           replace_all(void);
 
 
 void keyboard_post_init_user(void) {
     InitializeBuffer(&cbuff);
-    add_lookup_item("lgmail", LAUNCH_CHROME "gmail.com\n", "Gmail web");
+    add_lookup_item("cc", CC, "Visa Momentum");
+    add_lookup_item("ccexp", CCEXP,"CC exp");
+    add_lookup_item("ccv", CCV, "CCV");
     add_lookup_item("gmail", "brunzefb@gmail.com", "Gmail address");
+    add_lookup_item("lchat", LAUNCH_CHROME "chat.openai.com\n", "ChatGPT web");
+    add_lookup_item("lgmail", LAUNCH_CHROME "gmail.com\n", "Gmail web");
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
-
 }
 
 void replace_all() {
@@ -313,21 +316,46 @@ void add_lookup_item(char* key, char* value, char* description) {
     HASH_ADD_KEYPTR(hh, lookup_table, lookup_entry->key, strlen(lookup_entry->key), lookup_entry);
 }
 
-void show_all_keys(void) {
+void show_all_keys(char *cmd) {
     struct lookup *s;
     char buffer[256];
     int max_key_length = 0;
+    const char delimiter[] = " ";
 
-    SEND_STRING("Keys:\n");
-    for (s = lookup_table; s != NULL; s = s->hh.next) {
-      int key_length = strlen(s->key);
-      if (key_length > max_key_length)
-        max_key_length = key_length;
+    for (int i = 0; cmd[i] != '\0'; i++) {
+        snprintf(buffer, sizeof(buffer), "Character: %c, ASCII Value: 0x%x\n", 
+              cmd[i] < 0x20 ? '*' : (unsigned char)cmd[i], (unsigned char)cmd[i]);
+        SEND_STRING(buffer);
     }
 
+    SEND_STRING("\n");
+
+    // filter capability for ls, targeting description field
+    char* token = NULL;
+    token = strtok(cmd, delimiter);
+    token = strtok(NULL, delimiter);
+
     for (s = lookup_table; s != NULL; s = s->hh.next) {
-        snprintf(buffer, sizeof(buffer), "%-*s - %s\n", max_key_length, s->key, s->description);
-        SEND_STRING(buffer);
+        int key_length = strlen(s->key);
+        if (key_length > max_key_length)
+            max_key_length = key_length;
+    }
+
+    snprintf(buffer, sizeof(buffer), "%-*s   %s\n", max_key_length, "Key", "Description");
+    SEND_STRING(buffer);
+    snprintf(buffer, sizeof(buffer), "%-*s   %s\n", max_key_length, "---", "-----------");
+    SEND_STRING(buffer);
+
+    for (s = lookup_table; s != NULL; s = s->hh.next) {
+        if (token == NULL) {
+          snprintf(buffer, sizeof(buffer), "%-*s   %s\n", max_key_length, s->key, s->description);
+          SEND_STRING(buffer);
+          continue;
+        }
+        if (token != NULL && strlen(token) > 0 && strstr(s->description, token) != NULL) {
+          snprintf(buffer, sizeof(buffer), "%-*s   %s\n", max_key_length, s->key, s->description);
+          SEND_STRING(buffer);
+        }
     }
 }
 
@@ -695,7 +723,7 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
                 if (isLookupMode && keycode == KC_ENTER) {
                     GetBuffer(&cbuff, buffer, BUFFER_SIZE);
                     if (strncmp(buffer, "ls", 2) == 0) {
-                        show_all_keys();
+                        show_all_keys(buffer);
                         isLookupMode = false;
                         return false;
                     }

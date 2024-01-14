@@ -56,6 +56,8 @@ void GetBuffer(CircularBuffer* cb, char* key, int key_len) {
     while (pos < key_len - 1) {
         if (cb->buffer[i] >= KC_A && cb->buffer[i] <= KC_Z) {
             key[pos++] = (char) (cb->buffer[i] - KC_A + 'a');
+        } else if (cb->buffer[i]  == KC_SPACE) {
+            key[pos++] = ' ';
         }
 
         if (i == cb->tail) {
