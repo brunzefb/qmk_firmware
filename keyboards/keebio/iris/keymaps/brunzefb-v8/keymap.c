@@ -31,6 +31,7 @@ enum iris_layers {
 #define KC_CYCLE LCTL(KC_TAB)        // ctrl+tab is cycle editor windows in VSCode
 #define KC_RASE MO(_RAISE)           // RAISE momentary layer change
 #define KC_LOWR MO(_LOWER)           // LOWER momentary layer change
+#define KC_UTIL MO(_UTIL)            // UTIL momentary layer change
 #define KC_BL LCA(KC_J)              // Rectangle Window manageBUFFER_SIZEr for mac (WM) Bottom left
 #define KC_BH LCA(KC_DOWN)           // WM Bottom half
 #define KC_BOR LCA(KC_K)             // WM Bottom right
@@ -106,7 +107,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │  `~    │   A    │   R    │   S    │   T    │   G    │                     │   M    │   N    │   E    │   I    │   O    │ Enter  │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │  Shift │   Z    │   X    │   C    │   D    │   V    │  RAlt  │   │ RAISE  │   K    │   H    │   ,<   │   .>   │   /?   │  ' "   │
+    │  Shift │   Z    │   X    │   C    │   D    │   V    │ UTIL   │   │ RAISE  │   K    │   H    │   ,<   │   .>   │   /?   │  ' "   │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │ Ctrl   │ LAlt   │ Cmd/Gui│            │ LOWER  │ SPACE  │ ADJUST │
                                    └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -119,7 +120,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_GRAVE,KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                          KC_M,    KC_N,    KC_E,    KC_I,    KC_O,    KC_ENT,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_RALT,     TL_UPPR,  KC_K,   KC_H,    KC_COMM, KC_DOT,  KC_SLASH,KC_QUOT,
+     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_UTIL,     TL_UPPR,  KC_K,   KC_H,    KC_COMM, KC_DOT,  KC_SLASH,KC_QUOT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     KC_LCTL, KC_LALT, KC_LGUI,              TL_LOWR, KC_SPACE, KC_ADJU
                                 // └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -133,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │  `~    │   A    │   S    │   D    │   F    │   G    │                     │   H    │   J    │   K    │   L    │  : ;   │ ENTER  │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │  SHIFT │   Z    │   X    │   C    │   V    │   B    │  Alt   │   │RAISE   │   N    │   M    │   ,<   │   .>   │   /?   │ " '    │
+    │  SHIFT │   Z    │   X    │   C    │   V    │   B    │ UTIL   │   │RAISE   │   N    │   M    │   ,<   │   .>   │   /?   │ " '    │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │ Ctrl   │ Lalt   │ Cmd/Gui│            │ LOWER  │ Space  │ Adjust │
                                    └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -146,7 +147,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_GRAVE, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                          KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_RALT,     KC_RASE,   KC_N,   KC_M,   KC_COMM, KC_DOT, KC_SLASH, KC_QUOT,
+     KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_UTIL,     KC_RASE,   KC_N,   KC_M,   KC_COMM, KC_DOT, KC_SLASH, KC_QUOT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     KC_LCTL, KC_LALT, KC_LGUI,              KC_LOWR, KC_SPACE,KC_ADJU
                                 // └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -173,7 +174,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┤                       ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_OCDQUO,KC_UNDS,KC_OCPRN, KC_EQL,  KC_RPRN, KC_MINS,                        KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT, KC_END, KC_PGUP,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐     ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     LOOKUP,  KC_PIPE, KC_OCBRC,KC_AMPR, KC_RBRC, KC_SLASH,KC_BACKSLASH,  _______, ALT_TAB, SALL,    CUT,     UNDO,     REDO,   KC_PGDN,
+     _______,  KC_PIPE, KC_OCBRC,KC_AMPR, KC_RBRC, KC_SLASH,KC_BACKSLASH,  _______, ALT_TAB, SALL,    CUT,     UNDO,     REDO,   KC_PGDN,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘     └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                _______, _______, _______
   //                               └────────┴────────┴────────┘              └────────┴────────┴────────┘
@@ -195,7 +196,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_RAISE] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     K_VOLUP, K_VOLDN, KC_F10,  KC_F11,  KC_F12,  _______,                       KC_PSCR, KC_NUM,  KC_PSLS, KC_PAST, KC_PMNS, KC_BSPC,
+     K_VOLUP, K_VOLDN, KC_F10,  KC_F11,  KC_F12,  LOOKUP,                        KC_PSCR, KC_NUM,  KC_PSLS, KC_PAST, KC_PMNS, KC_BSPC,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      RGB_TOG, RGB_MOD, KC_F7,   KC_F8,   KC_F9,   RGB_HUI,                       KC_SCRL, KC_P7,   KC_P8,   KC_P9,   KC_PPLS, KC_PIPE,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -236,13 +237,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Util
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │QUERTY  │LtMouBtn│RtMouBtn│MouseUp  MWheelUp│MWheelDw│                     │<-Displ │  Help  │   =    │ LowRes │ HiRes  │Displ-> │
+    │F1      │CapsWord│        │        │        │        │                     │        │        │        │        │        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │COLEMAK │        │MouseL  │  Ed ↑  │MouseR  │        │                     │MissCtl │WTopLeft│WTopHalf│WTopHalf│        │        │
+    │        │        │        │        │        │        │                     │        │        │        │        │        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-    │IsLinux │TYPE_BUF│ Ed ←   │MouseDwn│  Ed →  │        │                     │        │WLftHalf│ WMaxim │WRtHalf │ mouse1 │ mouse2 │
+    │        │        │        │ S_ACC  │        │        │                     │        │ N_ACC  │        │        │        │        │
     ├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-    │        │        │        │  Ed ↓  │        │        │  Menu  │   │        │        │WBotLeft│WBotHalf│WBotRigt│ Cprev  │ Cnext  │
+    │        │        │        │ C_ACC  │        │        │        │   │        │        │        │        │        │        │        │
     └────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                    │        │        │        │            │        │        │        │
                                    └────────┴────────┴────────┘            └────────┴────────┴────────┘
@@ -251,7 +252,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
      KC_F1,   CW_TOGG, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
+     KC_M,    _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      _______, _______, _______, U_SS,     _______, _______,                       _______, U_NTIL,  _______, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -279,19 +280,42 @@ void           handle_cursor(uint16_t keycode, uint8_t mods, bool* flag, keyreco
 uint16_t       key_to_keycode_for_default_layer(int key);
 void           add_lookup_item(char* key, char* value, char* description);
 struct lookup* find_lookup_item(char* key);
+<<<<<<< HEAD
 void           show_all_keys(char * buffer);
+=======
+struct lookup* find_lookup_item_partial(char* key);
+void           show_all_keys(void);
+>>>>>>> 93d8f368f93598d78790259b2a509369310828d0
 void           replace_all(void);
 
 
 void keyboard_post_init_user(void) {
     InitializeBuffer(&cbuff);
-    add_lookup_item("cc", CC, "Visa Momentum");
-    add_lookup_item("ccexp", CCEXP,"CC exp");
-    add_lookup_item("ccv", CCV, "CCV");
+    add_lookup_item("wgmail", LAUNCH_CHROME "gmail.com\n", "Gmail web");
+    add_lookup_item("wbitbucket", LAUNCH_CHROME "https://bitbucket.netadds.net/login?next=\n", "SCIEX Bitbucket");
+    add_lookup_item("wconfluence", LAUNCH_CHROME "https://confluence.netadds.net/login.action?os_destination=%2F\n", "Confluence");
+    add_lookup_item("wcollaborator", LAUNCH_CHROME "http://codecollaborator:8080/ui\n", "Collaborator");
+    add_lookup_item("wetime", ETIME "http://amcon-etimeweb1.netadds.net/etmsystems/login.aspx\n", "ETime with Firefox");
+    add_lookup_item("wworkday", LAUNCH_CHROME "https://www.myworkday.com/danaher/d/home.htmld\n", "Workday");
+    add_lookup_item("wsmartsolve", LAUNCH_CHROME "https://sciex.pilgrimasp.com/prod/\n", "Smartsolve");
+    add_lookup_item("wjenkins", LAUNCH_CHROME "https://jenkins.sciex.net/login?next=\n", "Jenkins");
+    add_lookup_item("wsonar", LAUNCH_CHROME "https://sonar.sciex.net/sessions/new?return_to=%2F\n", "Workday");
+    add_lookup_item("wnexus", LAUNCH_CHROME "https://nexus.sciex.net\n", "Nexus");
+    add_lookup_item("wteamcity", LAUNCH_CHROME "https://teamcity.netadds.net/login.html\n", "Team City");
+    add_lookup_item("wawsqa", LAUNCH_CHROME "https://inferno-sandbox.signin.aws.amazon.com/console\n", "AWS qa web");
+    add_lookup_item("wawsnca", LAUNCH_CHROME "https://sciex-cloud-devops.signin.aws.amazon.com/console\n", "AWS nca web");
+    add_lookup_item("wawsit", LAUNCH_CHROME "https://812928068820.signin.aws.amazon.com/console\n", "AWS IT web");
+    add_lookup_item("wawsbs", LAUNCH_CHROME "https://brightspark.signin.aws.amazon.com/console\n", "AWS brightspark web");
+    add_lookup_item("wawsprod", LAUNCH_CHROME "https://prod-oneomics.signin.aws.amazon.com/console\n", "AWS oneomics prod web");
+    add_lookup_item("wawscdev", LAUNCH_CHROME "https://sciex-cloud-dev.signin.aws.amazon.com/console\n", "AWS cloud dev web");
+    add_lookup_item("wawsres", LAUNCH_CHROME "https://research-sciex.signin.aws.amazon.com/console\n", "AWS research web");
     add_lookup_item("gmail", "brunzefb@gmail.com", "Gmail address");
     add_lookup_item("lchat", LAUNCH_CHROME "chat.openai.com\n", "ChatGPT web");
     add_lookup_item("lgmail", LAUNCH_CHROME "gmail.com\n", "Gmail web");
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
+    add_lookup_item("me", "Friedrich Brunzema", "Friedrich Brunzema");
+    add_lookup_item("petime", "brunzefb\tSS_DELAY(100)xaris5\t\t ", "ETime login");
+
 }
 
 void replace_all() {
@@ -371,6 +395,18 @@ struct lookup* find_lookup_item(char* key) {
     struct lookup* lookup_entry;
     HASH_FIND_STR(lookup_table, key, lookup_entry);
     return lookup_entry;
+}
+
+
+struct lookup* find_lookup_item_partial(char* key) {
+    struct lookup *lookup_entry;
+
+    for (lookup_entry = lookup_table; lookup_entry != NULL; lookup_entry = lookup_entry->hh.next) {
+        if (strstr(lookup_entry->key, key) != NULL) {
+            return lookup_entry; // Partial match found, return the item
+        }
+    }
+    return NULL;
 }
 
 uint16_t key_to_keycode_for_default_layer(int key) {
@@ -728,7 +764,7 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
                         isLookupMode = false;
                         return false;
                     }
-                    lookup_entry = find_lookup_item(buffer);
+                    lookup_entry = find_lookup_item_partial(buffer);
 
                     // handle the error if the key was not found
                     if (lookup_entry == NULL) {
