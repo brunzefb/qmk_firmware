@@ -413,11 +413,12 @@ void handle_openclose(uint16_t kc1, uint16_t kc2, keyrecord_t* record, uint16_t*
 }
 
 // handle auto-enable of numlock
-void led_set_keymap(uint8_t usb_led) {
-    if (!(usb_led & (1 << USB_LED_NUM_LOCK))) {
+bool led_update_user(led_t led_state) {
+    if (!led_state.num_lock) {
         register_code(KC_NUM_LOCK);
         unregister_code(KC_NUM_LOCK);
     }
+    return false;
 }
 
 // Enable the ctrl+backspace (KC_BSPC) to function as delete forward (KC_DEL)
