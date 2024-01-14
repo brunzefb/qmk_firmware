@@ -287,12 +287,25 @@ void           replace_all(void);
 
 void keyboard_post_init_user(void) {
     InitializeBuffer(&cbuff);
-    add_lookup_item("gmail", "brunzefb@gmail.com", "Gmail address");
+    add_lookup_item("gmail", "brunzefb@gmail.com", "Gmail address"); 
     add_lookup_item("me", "Friedrich Brunzema", "Friedrich Brunzema");
-    add_lookup_item("petime", "brunzefb\tSS_DELAY(100)xaris5\t\t ", "ETime login");
+    add_lookup_item("petime", "brunzefb\tSS_DELAY(100)PETIME\t\t ", "ETime login");
+    add_lookup_item("pgmail", "PGMAIL\t", "Gmail password");
+    add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
+
+    add_lookup_item("pawsbs", "friedrich.brunzema\tPAWSBS\t\t ", "AWS brightspark username/password");
+    add_lookup_item("pawscdev", "friedrich.brunzema\tPAWSCDEV\t\t ", "AWS cloud/dev username/password");
+    add_lookup_item("pawscplat", "friedrich.brunzema\tPAWSCPLAT\t\t ", "AWS cloud/platform username/password");
+    add_lookup_item("pawsit", "friedrich.brunzema\tPAWSIT\t\t ", "AWS IT username/password");
+    add_lookup_item("pawsnca", "friedrich.brunzema\tPAWSNCA\t\t ", "AWS nca/cloud-devops username/password");
+    add_lookup_item("pawsprod", "friedrich.brunzema\tPAWSPROD\t\t ", "AWS oneomics-prod username/password");
+    add_lookup_item("pawsqa", "friedrich.brunzema\tPAWSQA\t\t ", "AWS inferno/qa username/password");
+    add_lookup_item("pawsres", "friedrich.brunzema\tPAWSRES\t\t ", "AWS research username/password");
+
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
     add_lookup_item("wawsbs", LAUNCH_CHROME "https://brightspark.signin.aws.amazon.com/console\n", "AWS brightspark web");
     add_lookup_item("wawscdev", LAUNCH_CHROME "https://sciex-cloud-dev.signin.aws.amazon.com/console\n", "AWS cloud dev web");
+    add_lookup_item("wawscplat", LAUNCH_CHROME "https://862420790506.signin.aws.amazon.com/console\n", "AWS cloud platform kaveri web");
     add_lookup_item("wawsit", LAUNCH_CHROME "https://812928068820.signin.aws.amazon.com/console\n", "AWS IT web");
     add_lookup_item("wawsnca", LAUNCH_CHROME "https://sciex-cloud-devops.signin.aws.amazon.com/console\n", "AWS nca web");
     add_lookup_item("wawsprod", LAUNCH_CHROME "https://prod-oneomics.signin.aws.amazon.com/console\n", "AWS oneomics prod web");
