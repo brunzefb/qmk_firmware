@@ -293,14 +293,14 @@ void keyboard_post_init_user(void) {
     add_lookup_item("pgmail", "PGMAIL\t", "Gmail password");
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
 
-    add_lookup_item("pawsbs", "friedrich.brunzema\tPAWSBS\t\t ", "AWS brightspark username/password");
-    add_lookup_item("pawscdev", "friedrich.brunzema\tPAWSCDEV\t\t ", "AWS cloud/dev username/password");
-    add_lookup_item("pawscplat", "friedrich.brunzema\tPAWSCPLAT\t\t ", "AWS cloud/platform username/password");
-    add_lookup_item("pawsit", "friedrich.brunzema\tPAWSIT\t\t ", "AWS IT username/password");
-    add_lookup_item("pawsnca", "friedrich.brunzema\tPAWSNCA\t\t ", "AWS nca/cloud-devops username/password");
-    add_lookup_item("pawsprod", "friedrich.brunzema\tPAWSPROD\t\t ", "AWS oneomics-prod username/password");
-    add_lookup_item("pawsqa", "friedrich.brunzema\tPAWSQA\t\t ", "AWS inferno/qa username/password");
-    add_lookup_item("pawsres", "friedrich.brunzema\tPAWSRES\t\t ", "AWS research username/password");
+    add_lookup_item("pawsbs", "friedrich.brunzema\tSS_DELAY(200)PAWSBS\t\tSS_DELAY(200)\n", "AWS brightspark username/password");
+    add_lookup_item("pawscdev", "Friedrich.Brunzema\tSS_DELAY(200)PAWSCDEV\t\tSS_DELAY(200)\n", "AWS cloud/dev username/password");
+    add_lookup_item("pawscplat", "Friedrich.Brunzema\tSS_DELAY(200)PAWSCPLAT\t\tSS_DELAY(200)\n", "AWS cloud/platform kaveri username/password");
+    add_lookup_item("pawsit", "friedrich.brunzema\tSS_DELAY(200)PAWSIT\t\tSS_DELAY(200)\n", "AWS IT username/password");
+    add_lookup_item("pawsnca", "friedrich.brunzema\tSS_DELAY(200)PAWSNCA\t\tSS_DELAY(200)\n", "AWS nca/cloud-devops username/password");
+    add_lookup_item("pawsprod", "friedrich.brunzema\tSS_DELAY(200)PAWSPROD\t\tSS_DELAY(200)\n", "AWS oneomics-prod username/password");
+    add_lookup_item("pawsqa", "friedrich.brunzema\tSS_DELAY(200)PAWSQA\t\tSS_DELAY(200)\n", "AWS inferno/qa username/password");
+    add_lookup_item("pawsres", "friedrich.brunzema\tSS_DELAY(200)PAWSRES\t\tSS_DELAY(200)\n", "AWS research username/password");
 
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
     add_lookup_item("wawsbs", LAUNCH_CHROME "https://brightspark.signin.aws.amazon.com/console\n", "AWS brightspark web");
