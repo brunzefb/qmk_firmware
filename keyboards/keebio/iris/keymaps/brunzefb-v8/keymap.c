@@ -293,20 +293,21 @@ void           replace_all(void);
 
 void keyboard_post_init_user(void) {
     InitializeBuffer(&cbuff);
-    add_lookup_item("gmail", "brunzefb@gmail.com", "Gmail address"); 
+    add_lookup_item("gmail", "brunzefb@gmail.com", "Gmail address");
     add_lookup_item("me", "Friedrich Brunzema", "Friedrich Brunzema");
-    add_lookup_item("petime", "brunzefb\tSS_DELAY(100)PETIME\t\t ", "ETime login");
-    add_lookup_item("pgmail", "PGMAIL\t", "Gmail password");
+    add_lookup_item("petime", "brunzefb\t"SS_DELAY(100)PETIME"\t\t ", "ETime login");
+    add_lookup_item("pgmail", PGMAIL"\t", "Gmail password");
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
 
-    add_lookup_item("pawsbs", "friedrich.brunzema\tSS_DELAY(200)PAWSBS\t\tSS_DELAY(200)\n", "AWS brightspark username/password");
-    add_lookup_item("pawscdev", "Friedrich.Brunzema\tSS_DELAY(200)PAWSCDEV\t\tSS_DELAY(200)\n", "AWS cloud/dev username/password");
-    add_lookup_item("pawscplat", "Friedrich.Brunzema\tSS_DELAY(200)PAWSCPLAT\t\tSS_DELAY(200)\n", "AWS cloud/platform kaveri username/password");
-    add_lookup_item("pawsit", "friedrich.brunzema\tSS_DELAY(200)PAWSIT\t\tSS_DELAY(200)\n", "AWS IT username/password");
-    add_lookup_item("pawsnca", "friedrich.brunzema\tSS_DELAY(200)PAWSNCA\t\tSS_DELAY(200)\n", "AWS nca/cloud-devops username/password");
-    add_lookup_item("pawsprod", "friedrich.brunzema\tSS_DELAY(200)PAWSPROD\t\tSS_DELAY(200)\n", "AWS oneomics-prod username/password");
-    add_lookup_item("pawsqa", "friedrich.brunzema\tSS_DELAY(200)PAWSQA\t\tSS_DELAY(200)\n", "AWS inferno/qa username/password");
-    add_lookup_item("pawsres", "friedrich.brunzema\tSS_DELAY(200)PAWSRES\t\tSS_DELAY(200)\n", "AWS research username/password");
+    add_lookup_item("pawsbs", "friedrich.brunzema\t"PAWSBS"\n", "AWS brightspark username/password");
+    add_lookup_item("pawscdev", "Friedrich.Brunzema\t"PAWSCDEV"\n", "AWS cloud/dev username/password");
+    add_lookup_item("pawscplat", "Friedrich.Brunzema\t"PAWSCPLAT"\n", "AWS cloud/platform kaveri username/password");
+    add_lookup_item("pawsit", "friedrich.brunzema\t"PAWSIT"\n", "AWS IT username/password");
+    add_lookup_item("pawsnca", "friedrich.brunzema\t"PAWSNCA"\n", "AWS nca/cloud-devops username/password");
+    add_lookup_item("pawsprod", "friedrich.brunzema\t"PAWSPROD"\n", "AWS oneomics-prod username/password");
+    add_lookup_item("pawsqa", "friedrich.brunzema\t"PAWSQA"\n", "AWS inferno/qa username/password");
+    add_lookup_item("pawsres", "friedrich.brunzema\t"PAWSRES"\n", "AWS research username/password");
+
 
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
     add_lookup_item("wawsbs", LAUNCH_CHROME "https://brightspark.signin.aws.amazon.com/console\n", "AWS brightspark web");
@@ -757,13 +758,16 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
             return false;
         }
         case ENTPASS: {
-            isLookupMode = false;
-            lastCommand[0]='p'; // change command to corresponding password
-            lookup_entry = find_lookup_item_partial(lastCommand);
-            if (lookup_entry != NULL) {
-                SEND_STRING(lookup_entry->value);
-            }
-            return false;
+          if (record->event.pressed) {
+              isLookupMode = false;
+              lastCommand[0]='p'; // change command to corresponding password
+              lookup_entry = find_lookup_item_partial(lastCommand);
+              if (lookup_entry != NULL) {
+                  SEND_STRING(lookup_entry->value);
+                  return false;
+              }
+          }
+          return false;
         }
         default: {
             if (record->event.pressed) {
@@ -797,6 +801,7 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
                             tap_code16(KC_BSPC);
                         }
                     } else {
+                        memset(lastCommand, 0, LOOKUP_KEY_LENGTH);
                         strncpy(lastCommand, lookup_entry->key, LOOKUP_KEY_LENGTH);
                         SEND_STRING(lookup_entry->value);
                     }
