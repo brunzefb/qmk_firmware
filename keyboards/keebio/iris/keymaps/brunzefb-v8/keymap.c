@@ -93,7 +93,8 @@ enum custom_keycodes {
     TERMCLR,
     BOOTLOG,
     TYPE_BUF,
-    LOOKUP
+    LOOKUP,
+    ENTPASS
 };
 
 
@@ -182,7 +183,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Raise
     ┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
-    │ VolUp  │ VolDown│   F10  │   F11  │  F12   │        │                     │ PRT    │ NUMLK  │   /    │   *    │   -    │ Back   │
+    │ VolUp  │ VolDown│   F10  │   F11  │  F12   │ LOOKUP │                     │ PRT    │ NUMLK  │   /    │   *    │   -    │ Back   │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
     │RGB_TOG │ RGB_MOD│   F7   │   F8   │  F9    │  Hue   │                     │ SCRLCK │   7    │   8    │   9    │   +    │   -    │
     ├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -225,7 +226,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
      QWERTY,  KC_BTN1, KC_BTN2, KC_MS_U, KC_WH_U, KC_WH_D,                       KC_MTLD, KC_HELP, KC_PEQL, KC_LORES,KC_HIRES,KC_MTRD,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-     COLEMAK, AC_TOGG, KC_MS_LEFT,TOP,   KC_MS_RIGHT, _______,                   KC_MCTL,  KC_TL,   KC_TH,   KC_TR,  _______, _______,
+     COLEMAK, AC_TOGG, KC_MS_LEFT,TOP,   KC_MS_RIGHT, _______,                   KC_MCTL,  KC_TL,   KC_TH,   KC_TR,  _______, ENTPASS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
      LINUX,   TYPE_BUF, LEFT,    KC_MS_DOWN,RIGHT, _______,                       _______, KC_LH,   KC_FS,   KC_RH,   KC_BTN1, KC_BTN2,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -263,15 +264,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+#define LOOKUP_KEY_LENGTH 30
+#define LOOKUP_VALUE_LENGTH 255
+#define LOOKUP_DESCRIPTION_LENGTH 80
+
 CircularBuffer cbuff;
 struct lookup {
-    char  key[30];
-    char  value[255];
-    char  description[80];
+    char  key[LOOKUP_KEY_LENGTH];
+    char  value[LOOKUP_VALUE_LENGTH];
+    char  description[LOOKUP_DESCRIPTION_LENGTH];
     UT_hash_handle hh;
 };
 
 static bool isLinux = false;
+static char lastCommand[LOOKUP_KEY_LENGTH];
 struct lookup* lookup_table = NULL;
 static const char delimiter[] = "<!!>";
 void           replaceChar(char *str, char search, char replacement);
@@ -342,15 +348,15 @@ void add_lookup_item(char* key, char* value, char* description) {
     lookup_entry = find_lookup_item(key);
     lookup_entry = malloc(sizeof(struct lookup));
     memset(lookup_entry, 0, sizeof(struct lookup));
-    strncpy(lookup_entry->key, key, 30);
-    strncpy(lookup_entry->value, value, 255);
-    strncpy(lookup_entry->description, description, 80);
+    strncpy(lookup_entry->key, key, LOOKUP_KEY_LENGTH);
+    strncpy(lookup_entry->value, value, LOOKUP_VALUE_LENGTH);
+    strncpy(lookup_entry->description, description, LOOKUP_DESCRIPTION_LENGTH);
     HASH_ADD_KEYPTR(hh, lookup_table, lookup_entry->key, strlen(lookup_entry->key), lookup_entry);
 }
 
 void show_all_keys(char *cmd) {
     struct lookup *s;
-    char buffer[256];
+    char buffer[LOOKUP_VALUE_LENGTH + 1];
     int max_key_length = 0;
     const char delimiter[] = " ";
 
@@ -750,6 +756,15 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
             }
             return false;
         }
+        case ENTPASS: {
+            isLookupMode = false;
+            lastCommand[0]='p'; // change command to corresponding password
+            lookup_entry = find_lookup_item_partial(lastCommand);
+            if (lookup_entry != NULL) {
+                SEND_STRING(lookup_entry->value);
+            }
+            return false;
+        }
         default: {
             if (record->event.pressed) {
                 // get out of lookup mode
@@ -782,6 +797,7 @@ bool    process_record_user(uint16_t keycode, keyrecord_t* record) {
                             tap_code16(KC_BSPC);
                         }
                     } else {
+                        strncpy(lastCommand, lookup_entry->key, LOOKUP_KEY_LENGTH);
                         SEND_STRING(lookup_entry->value);
                     }
                     isLookupMode = false;
