@@ -307,6 +307,8 @@ void keyboard_post_init_user(void) {
     add_lookup_item("pawsprod", "friedrich.brunzema\t"PAWSPROD"\n", "AWS oneomics-prod username/password");
     add_lookup_item("pawsqa", "friedrich.brunzema\t"PAWSQA"\n", "AWS inferno/qa username/password");
     add_lookup_item("pawsres", "friedrich.brunzema\t"PAWSRES"\n", "AWS research username/password");
+    add_lookup_item("pjira", NETADDS_USER, "Jira username/password");
+    add_lookup_item("poo", PQC, "QuantCloud");
 
 
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
@@ -325,6 +327,7 @@ void keyboard_post_init_user(void) {
     add_lookup_item("wetime", ETIME "http://amcon-etimeweb1.netadds.net/etmsystems/login.aspx\n", "ETime with Firefox");
     add_lookup_item("wgmail", LAUNCH_CHROME "gmail.com\n", "Gmail web");
     add_lookup_item("wjenkins", LAUNCH_CHROME "https://jenkins.sciex.net/login?next=\n", "Jenkins");
+    add_lookup_item("wjira", LAUNCH_CHROME "https://jira.netadds.net/secure/RapidBoard.jspa?rapidView=690\n", "Jira");
     add_lookup_item("wnexus", LAUNCH_CHROME "https://nexus.sciex.net\n", "Nexus");
     add_lookup_item("wsmartsolve", LAUNCH_CHROME "https://sciex.pilgrimasp.com/prod/\n", "Smartsolve");
     add_lookup_item("wsonar", LAUNCH_CHROME "https://sonar.sciex.net/sessions/new?return_to=%2F\n", "Workday");
@@ -362,7 +365,7 @@ void show_all_keys(char *cmd) {
     const char delimiter[] = " ";
 
     for (int i = 0; cmd[i] != '\0'; i++) {
-        snprintf(buffer, sizeof(buffer), "Character: %c, ASCII Value: 0x%x\n", 
+        snprintf(buffer, sizeof(buffer), "Character: %c, ASCII Value: 0x%x\n",
               cmd[i] < 0x20 ? '*' : (unsigned char)cmd[i], (unsigned char)cmd[i]);
         SEND_STRING(buffer);
     }
