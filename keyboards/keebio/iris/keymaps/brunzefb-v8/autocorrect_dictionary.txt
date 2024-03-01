@@ -32,4 +32,5 @@ surprize: -> surprize
 :thier: -> their
 weird: -> weird
 widht: -> width
+mannually: -> manually
 
