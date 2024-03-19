@@ -50,6 +50,7 @@ enum iris_layers {
 #define KC_CPRV LCTL(KC_LBRC)        // ctrl+[ is next file in code collaborator
 #define KC_CNXT LCTL(KC_RBRC)        // ctrl+] is next file in code collaborator
 #define KC_REVS LCTL(KC_R)           // ctrl+R is search in terminal history
+#define KC_ACC LCTL(KC_BACKSLASH)    // ctrl+\ is accept code review
 
 #define TAPPING_TERM 200
 
@@ -226,9 +227,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                     ┌────────┬────────┬────────┬────────┬────────┬────────┐
      QWERTY,  KC_BTN1, KC_BTN2, KC_MS_U, KC_WH_U, KC_WH_D,                       KC_MTLD, KC_HELP, KC_PEQL, KC_LORES,KC_HIRES,KC_MTRD,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-     COLEMAK, AC_TOGG, KC_MS_LEFT,TOP,   KC_MS_RIGHT, _______,                   KC_MCTL,  KC_TL,   KC_TH,   KC_TR,  _______, ENTPASS,
+     COLEMAK, AC_TOGG, KC_MS_LEFT,TOP,   KC_MS_RIGHT, _______,                   KC_MCTL,  KC_TL,   KC_TH,   KC_TR,  KC_ACC , ENTPASS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                     ├────────┼────────┼────────┼────────┼────────┼────────┤
-     LINUX,   TYPE_BUF, LEFT,    KC_MS_DOWN,RIGHT, _______,                       _______, KC_LH,   KC_FS,   KC_RH,   KC_BTN1, KC_BTN2,
+     LINUX,   TYPE_BUF, LEFT,    KC_MS_DOWN,RIGHT, _______,                       _______, KC_LH,   KC_FS,   KC_RH,  KC_BTN1, KC_BTN2,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐   ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      PATH,    BOOTLOG, _______, BOTTOM,  _______, KC_MENU, _______,     _______, _______, KC_BL,   KC_BH,   KC_BOR,  KC_CPRV, KC_CNXT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘   └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
