@@ -325,7 +325,7 @@ void keyboard_post_init_user(void) {
     add_lookup_item("wchat", LAUNCH_CHROME "chat.openai.com\n", "ChatGPT web");
     add_lookup_item("wcollaborator", LAUNCH_CHROME "http://codecollaborator:8080/ui\n", "Collaborator");
     add_lookup_item("wconfluence", LAUNCH_CHROME "https://confluence.netadds.net/login.action?os_destination=%2F\n", "Confluence");
-    add_lookup_item("wetime", ETIME "http://amcon-etimeweb1.netadds.net/etmsystems/login.aspx\n", "ETime with Firefox");
+    add_lookup_item("wetime", LAUNCH_CHROME "http://amcon-etimeweb1.netadds.net/etmsystems/login.aspx\n", "ETime with Chrome");
     add_lookup_item("wgmail", LAUNCH_CHROME "gmail.com\n", "Gmail web");
     add_lookup_item("wjenkins", LAUNCH_CHROME "https://jenkins.sciex.net/login?next=\n", "Jenkins");
     add_lookup_item("wjira", LAUNCH_CHROME "https://jira.netadds.net/secure/RapidBoard.jspa?rapidView=690\n", "Jira");
