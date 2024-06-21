@@ -300,6 +300,16 @@ void keyboard_post_init_user(void) {
     add_lookup_item("pgmail", PGMAIL"\t", "Gmail password");
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
 
+    add_lookup_item("phone", PHONE, "Phone");
+    add_lookup_item("address", ADDRESS, "Address");
+    add_lookup_item("city", CITY, "City");
+    add_lookup_item("postal",POSTAL, "Postal code");
+    add_lookup_item("city", CITY, "Sciex mail");
+
+    add_lookup_item("visa", CC, "Visa Momentum");
+    add_lookup_item("visaexp", CCEXP, "Visa exp");
+    add_lookup_item("visaccv", CCV, "Visa CCV");
+
     add_lookup_item("pawsbs", "friedrich.brunzema\t"PAWSBS"\n", "AWS brightspark username/password");
     add_lookup_item("pawscdev", "Friedrich.Brunzema\t"PAWSCDEV"\n", "AWS cloud/dev username/password");
     add_lookup_item("pawscplat", "Friedrich.Brunzema\t"PAWSCPLAT"\n", "AWS cloud/platform kaveri username/password");
