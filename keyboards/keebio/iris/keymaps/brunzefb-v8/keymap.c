@@ -294,7 +294,7 @@ void           replace_all(void);
 
 void keyboard_post_init_user(void) {
     InitializeBuffer(&cbuff);
-    add_lookup_item("gmail", "brunzefb@gmail.com", "Gmail address");
+    add_lookup_item("gmail", "brunzefb@gmail.com\t", "Gmail address");
     add_lookup_item("me", "Friedrich Brunzema", "Friedrich Brunzema");
     add_lookup_item("petime", "brunzefb\t"SS_DELAY(100)PETIME"\t\t ", "ETime login");
     add_lookup_item("pgmail", PGMAIL"\t", "Gmail password");
