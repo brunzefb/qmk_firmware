@@ -331,6 +331,7 @@ void keyboard_post_init_user(void) {
     add_lookup_item("wawsprod", LAUNCH_CHROME "https://prod-oneomics.signin.aws.amazon.com/console\n", "AWS oneomics prod web");
     add_lookup_item("wawsqa", LAUNCH_CHROME "https://inferno-sandbox.signin.aws.amazon.com/console\n", "AWS qa web");
     add_lookup_item("wawsres", LAUNCH_CHROME "https://research-sciex.signin.aws.amazon.com/console\n", "AWS research web");
+    add_lookup_item("wawsmp", LAUNCH_CHROME "https://abs-aws-ctl-master.signin.aws.amazon.com/console\n", "AWS master payer");
     add_lookup_item("wbitbucket", LAUNCH_CHROME "https://bitbucket.netadds.net/login?next=\n", "SCIEX Bitbucket");
     add_lookup_item("wchat", LAUNCH_CHROME "chat.openai.com\n", "ChatGPT web");
     add_lookup_item("wcollaborator", LAUNCH_CHROME "http://codecollaborator:8080/ui\n", "Collaborator");
