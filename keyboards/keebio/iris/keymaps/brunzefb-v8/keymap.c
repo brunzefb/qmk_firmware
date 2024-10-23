@@ -318,7 +318,7 @@ void keyboard_post_init_user(void) {
     add_lookup_item("pawsprod", "friedrich.brunzema\t"PAWSPROD"\n", "AWS oneomics-prod username/password");
     add_lookup_item("pawsqa", "friedrich.brunzema\t"PAWSQA"\n", "AWS inferno/qa username/password");
     add_lookup_item("pawsres", "friedrich.brunzema\t"PAWSRES"\n", "AWS research username/password");
-    add_lookup_item("pawsmp", "Friedrich.Brunzema@sciex\t"PAWSMP"\n", "AWS master payer username/password");
+    add_lookup_item("pawsmp", "Friedrich.Brunzema@sciex.com\t"PAWSMP"\n", "AWS master payer username/password");
     add_lookup_item("pjira", NETADDS_USER, "Jira username/password");
     add_lookup_item("poo", PQC, "QuantCloud");
 
