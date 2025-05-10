@@ -321,8 +321,8 @@ void keyboard_post_init_user(void) {
     add_lookup_item("pawsmp", "Friedrich.Brunzema@sciex.com\t"PAWSMP"\n", "AWS master payer username/password");
     add_lookup_item("pjira", NETADDS_USER, "Jira username/password");
     add_lookup_item("poo", PQC, "QuantCloud");
-
-
+    add_lookup_item("jpw", "Friedrich\t"PJENKINS"\t\t ", "Jenkins username/password");
+    add_lookup_item("napc", "friedrich.brunzema\t"PCOLLAB"\t ", "Collaborator username/password");
     add_lookup_item("smail", "friedrich.brunzema@sciex.com", "Sciex mail");
     add_lookup_item("wawsbs", LAUNCH_CHROME "https://brightspark.signin.aws.amazon.com/console\n", "AWS brightspark web");
     add_lookup_item("wawscdev", LAUNCH_CHROME "https://sciex-cloud-dev.signin.aws.amazon.com/console\n", "AWS cloud dev web");
